@@ -1,0 +1,40 @@
+.alerta-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #7f1d1d;
+  color: #fff;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 1100;
+  font-size: 13px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.alerta-banner-contenido {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.alerta-icono {
+  font-size: 16px;
+}
+
+.alerta-cerrar {
+  background: transparent;
+  border: none;
+  color: #fecaca;
+  font-size: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.alerta-cerrar:hover {
+  color: #fff;
+}

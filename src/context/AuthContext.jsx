@@ -17,6 +17,8 @@ export function AuthProvider({ children }) {
     setCargando(false);
   }, []);
 
+  // ==================== AUTENTICACIÓN ====================
+
   const login = async (email, password) => {
     const res = await client.post("/auth/login", { email, password });
     const { token, usuario: usuarioData } = res.data;
@@ -59,6 +61,8 @@ export function AuthProvider({ children }) {
     setUsuario(null);
   };
 
+  // ==================== DISPOSITIVOS / ROBOTS ====================
+
   const misDispositivos = async () => {
     const res = await client.get("/dispositivos/mios");
     return res.data;
@@ -79,11 +83,42 @@ export function AuthProvider({ children }) {
     return res.data;
   };
 
+  // ==================== PERFIL ====================
+
+  const actualizarNombre = async (nombre) => {
+    const res = await client.put("/perfil/actualizar-nombre", { nombre });
+    const usuarioActualizado = res.data.usuario;
+    localStorage.setItem("wally_usuario", JSON.stringify(usuarioActualizado));
+    setUsuario(usuarioActualizado);
+    return res.data;
+  };
+
+  const cambiarPassword = async (password_actual, password_nueva) => {
+    const res = await client.put("/perfil/cambiar-password", {
+      password_actual,
+      password_nueva,
+    });
+    return res.data;
+  };
+
+  const exportarMisDatos = async (device_id) => {
+    const res = await client.get(`/perfil/exportar/${device_id}`, { responseType: "blob" });
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `historial_${device_id}.xlsx`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
   return (
     <AuthContext.Provider
       value={{
         usuario,
         cargando,
+
+        // Auth
         login,
         registro,
         verificarCodigo,
@@ -91,10 +126,18 @@ export function AuthProvider({ children }) {
         olvidePassword,
         resetearPassword,
         logout,
+
+        // Dispositivos
         misDispositivos,
         vincularDispositivo,
         editarDispositivo,
         desvincularDispositivo,
+
+        // Perfil
+        actualizarNombre,
+        cambiarPassword,
+        exportarMisDatos,
+
         estaAutenticado: !!usuario,
         esAdmin: usuario?.rol === "admin",
       }}

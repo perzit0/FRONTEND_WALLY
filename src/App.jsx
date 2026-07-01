@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import Home from "./pages/Home";
 import AdminDashboard from "./pages/AdminDashboard";
+import PerfilPage from "./pages/PerfilPage";
 
 function RutaAdmin({ children }) {
   const { estaAutenticado, esAdmin, cargando } = useAuth();
@@ -19,6 +20,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/perfil" element={<PerfilPage />} />
       <Route
         path="/admin"
         element={

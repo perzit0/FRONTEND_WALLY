@@ -26,10 +26,26 @@ function crearIconoRobot(color, enAlerta) {
   });
 }
 
+// ---- Niveles de calidad por tipo de sensor ----
+
 function nivelCO(co) {
   if (co === null || co === undefined) return "sin datos";
-  if (co < 30) return "bueno";
-  if (co < 50) return "moderado";
+  if (co < 9) return "bueno";
+  if (co < 35) return "moderado";
+  return "malo";
+}
+
+function nivelMQ135(valor) {
+  if (valor === null || valor === undefined) return "sin datos";
+  if (valor < 800) return "bueno";
+  if (valor < 1200) return "moderado";
+  return "malo";
+}
+
+function nivelPM(pm) {
+  if (pm === null || pm === undefined) return "sin datos";
+  if (pm < 12) return "bueno";
+  if (pm < 35.4) return "moderado";
   return "malo";
 }
 
@@ -56,7 +72,7 @@ function Mapa() {
 
   useEffect(() => {
     cargarDispositivos();
-    const intervalo = setInterval(cargarDispositivos, 30000);
+    const intervalo = setInterval(cargarDispositivos, 10000);
     return () => clearInterval(intervalo);
   }, []);
 
@@ -74,8 +90,12 @@ function Mapa() {
       {dispositivos.map((d) => {
         if (!d.ultima_lectura || d.ultima_lectura.lat === null) return null;
 
-        const nivel = nivelCO(d.ultima_lectura.co);
-        const icono = crearIconoRobot(d.color || "#38bdf8", nivel === "malo");
+        const nivelCOActual = nivelCO(d.ultima_lectura.co);
+        const nivelGases = nivelMQ135(d.ultima_lectura.mq135);
+        const nivelPolvo = nivelPM(d.ultima_lectura.pm);
+
+        const enAlerta = nivelCOActual === "malo" || nivelGases === "malo" || nivelPolvo === "malo";
+        const icono = crearIconoRobot(d.color || "#38bdf8", enAlerta);
 
         return (
           <Marker
@@ -84,17 +104,28 @@ function Mapa() {
             icon={icono}
           >
             <Popup>
-              <div>
+              <div style={{ minWidth: 190 }}>
                 <strong>{d.nombre || d.device_id}</strong>
-                <p style={{ margin: "6px 0" }}>
-                  CO:{" "}
-                  <span style={{ color: colorPorNivel(nivel), fontWeight: 600 }}>
-                    {d.ultima_lectura.co ?? "S/D"} ppm ({nivel})
+
+                <p style={{ margin: "8px 0 2px 0" }}>
+                  <span style={{ color: colorPorNivel(nivelCOActual), fontWeight: 600 }}>
+                    {d.ultima_lectura.co ?? "S/D"} ppm ({nivelCOActual})
                   </span>
                 </p>
-                <p style={{ margin: "2px 0" }}>MQ135: {d.ultima_lectura.mq135 ?? "S/D"}</p>
-                <p style={{ margin: "2px 0" }}>PM: {d.ultima_lectura.pm ?? "S/D"} µg/m³</p>
-                <p style={{ margin: "6px 0 0 0", fontSize: 11, color: "#6b7280" }}>
+
+                <p style={{ margin: "2px 0" }}>
+                  <span style={{ color: colorPorNivel(nivelGases), fontWeight: 600 }}>
+                    {d.ultima_lectura.mq135 ?? "S/D"} ppm ({nivelGases})
+                  </span>
+                </p>
+
+                <p style={{ margin: "2px 0" }}>
+                  <span style={{ color: colorPorNivel(nivelPolvo), fontWeight: 600 }}>
+                    {d.ultima_lectura.pm ?? "S/D"} µg/m³ ({nivelPolvo})
+                  </span>
+                </p>
+
+                <p style={{ margin: "8px 0 0 0", fontSize: 11, color: "#6b7280" }}>
                   Última lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString()}
                 </p>
               </div>

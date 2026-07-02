@@ -26,27 +26,28 @@ function crearIconoRobot(color, enAlerta) {
   });
 }
 
-// ---- Niveles de calidad por tipo de sensor ----
-
 function nivelCO(co) {
   if (co === null || co === undefined) return "sin datos";
   if (co < 9) return "bueno";
   if (co < 35) return "moderado";
-  return "malo";
+  if (co < 60) return "malo";
+  return "critico";
 }
 
 function nivelMQ135(valor) {
   if (valor === null || valor === undefined) return "sin datos";
   if (valor < 800) return "bueno";
   if (valor < 1200) return "moderado";
-  return "malo";
+  if (valor < 1500) return "malo";
+  return "critico";
 }
 
 function nivelPM(pm) {
   if (pm === null || pm === undefined) return "sin datos";
   if (pm < 12) return "bueno";
   if (pm < 35.4) return "moderado";
-  return "malo";
+  if (pm < 55) return "malo";
+  return "critico";
 }
 
 function colorPorNivel(nivel) {
@@ -54,6 +55,7 @@ function colorPorNivel(nivel) {
     case "bueno": return "#22c55e";
     case "moderado": return "#f59e0b";
     case "malo": return "#ef4444";
+    case "critico": return "#991b1b";
     default: return "#9ca3af";
   }
 }
@@ -94,7 +96,10 @@ function Mapa() {
         const nivelGases = nivelMQ135(d.ultima_lectura.mq135);
         const nivelPolvo = nivelPM(d.ultima_lectura.pm);
 
-        const enAlerta = nivelCOActual === "malo" || nivelGases === "malo" || nivelPolvo === "malo";
+        const enAlerta = ["malo", "critico"].includes(nivelCOActual) ||
+                          ["malo", "critico"].includes(nivelGases) ||
+                          ["malo", "critico"].includes(nivelPolvo);
+
         const icono = crearIconoRobot(d.color || "#38bdf8", enAlerta);
 
         return (
@@ -104,7 +109,7 @@ function Mapa() {
             icon={icono}
           >
             <Popup>
-              <div style={{ minWidth: 190 }}>
+              <div style={{ minWidth: 200 }}>
                 <strong>{d.nombre || d.device_id}</strong>
 
                 <p style={{ margin: "8px 0 2px 0" }}>
@@ -125,7 +130,11 @@ function Mapa() {
                   </span>
                 </p>
 
-                <p style={{ margin: "8px 0 0 0", fontSize: 11, color: "#6b7280" }}>
+                <p style={{ margin: "8px 0 2px 0", fontSize: 11, color: "#9ca3af" }}>
+                  Lat: {d.ultima_lectura.lat?.toFixed(6)} | Lng: {d.ultima_lectura.lng?.toFixed(6)}
+                </p>
+
+                <p style={{ margin: "4px 0 0 0", fontSize: 11, color: "#6b7280" }}>
                   Última lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString()}
                 </p>
               </div>

@@ -139,7 +139,7 @@ function AdminDashboard() {
   };
 
   const datosGrafico = {
-    labels: lecturas.map((l) => new Date(l.timestamp).toLocaleTimeString()),
+    labels: lecturas.map((l) => new Date(l.timestamp).toLocaleTimeString("es-PE", { timeZone: "America/Lima" })),
     datasets: [
       {
         label: "CO (ppm)",

@@ -24,7 +24,9 @@ const opcionesBase = {
 };
 
 function GraficoRobot({ lecturas }) {
-  const labels = lecturas.map((l) => new Date(l.timestamp).toLocaleString());
+  const labels = lecturas.map((l) =>
+  new Date(l.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })
+);
 
   const datosCO = {
     labels,

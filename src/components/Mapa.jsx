@@ -138,7 +138,7 @@ function Mapa() {
     </p>
 
     <p style={{ margin: "4px 0 0 0", fontSize: 11, color: "#6b7280" }}>
-      Última lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString()}
+      ÚÚltima lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })}
     </p>
   </div>
 </Popup>

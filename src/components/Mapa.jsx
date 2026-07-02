@@ -109,36 +109,39 @@ function Mapa() {
             icon={icono}
           >
             <Popup>
-              <div style={{ minWidth: 200 }}>
-                <strong>{d.nombre || d.device_id}</strong>
+  <div style={{ minWidth: 210 }}>
+    <strong>{d.nombre || d.device_id}</strong>
 
-                <p style={{ margin: "8px 0 2px 0" }}>
-                  <span style={{ color: colorPorNivel(nivelCOActual), fontWeight: 600 }}>
-                    {d.ultima_lectura.co ?? "S/D"} ppm ({nivelCOActual})
-                  </span>
-                </p>
+    <p style={{ margin: "8px 0 2px 0" }}>
+      <span style={{ fontWeight: 600, color: "#374151" }}>CO: </span>
+      <span style={{ color: colorPorNivel(nivelCOActual), fontWeight: 600 }}>
+        {d.ultima_lectura.co ?? "S/D"} ppm ({nivelCOActual})
+      </span>
+    </p>
 
-                <p style={{ margin: "2px 0" }}>
-                  <span style={{ color: colorPorNivel(nivelGases), fontWeight: 600 }}>
-                    {d.ultima_lectura.mq135 ?? "S/D"} ppm ({nivelGases})
-                  </span>
-                </p>
+    <p style={{ margin: "2px 0" }}>
+      <span style={{ fontWeight: 600, color: "#374151" }}>Calidad del aire: </span>
+      <span style={{ color: colorPorNivel(nivelGases), fontWeight: 600 }}>
+        {nivelGases === "bueno" ? "Buena calidad" : nivelGases === "moderado" ? "Calidad moderada" : nivelGases === "malo" ? "Mala calidad" : nivelGases === "critico" ? "Calidad crítica" : "Sin datos"}
+      </span>
+    </p>
 
-                <p style={{ margin: "2px 0" }}>
-                  <span style={{ color: colorPorNivel(nivelPolvo), fontWeight: 600 }}>
-                    {d.ultima_lectura.pm ?? "S/D"} µg/m³ ({nivelPolvo})
-                  </span>
-                </p>
+    <p style={{ margin: "2px 0" }}>
+      <span style={{ fontWeight: 600, color: "#374151" }}>PM: </span>
+      <span style={{ color: colorPorNivel(nivelPolvo), fontWeight: 600 }}>
+        {d.ultima_lectura.pm ?? "S/D"} µg/m³ ({nivelPolvo})
+      </span>
+    </p>
 
-                <p style={{ margin: "8px 0 2px 0", fontSize: 11, color: "#9ca3af" }}>
-                  Lat: {d.ultima_lectura.lat?.toFixed(6)} | Lng: {d.ultima_lectura.lng?.toFixed(6)}
-                </p>
+    <p style={{ margin: "8px 0 2px 0", fontSize: 11, color: "#9ca3af" }}>
+      Lat: {d.ultima_lectura.lat?.toFixed(6)} | Lng: {d.ultima_lectura.lng?.toFixed(6)}
+    </p>
 
-                <p style={{ margin: "4px 0 0 0", fontSize: 11, color: "#6b7280" }}>
-                  Última lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString()}
-                </p>
-              </div>
-            </Popup>
+    <p style={{ margin: "4px 0 0 0", fontSize: 11, color: "#6b7280" }}>
+      Última lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString()}
+    </p>
+  </div>
+</Popup>
           </Marker>
         );
       })}

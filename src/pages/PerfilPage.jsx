@@ -238,9 +238,16 @@ function PerfilPage() {
                         </div>
                         <div className="perfil-page-robot-acciones">
                           <button onClick={() => setEditando(r.device_id)}>Editar</button>
-                          <button onClick={() => exportarMisDatos(r.device_id)}>
-                            Descargar datos
-                          </button>
+                          <button onClick={async () => {
+  try {
+    await exportarMisDatos(r.device_id);
+  } catch (err) {
+    alert("Error al descargar: " + (err.response?.status === 403 ? "no tienes permiso sobre este robot" : "intenta de nuevo"));
+    console.error(err);
+  }
+}}>
+  Descargar datos
+</button>
                           <button
                             onClick={() => manejarDesvincular(r.device_id)}
                             className="perfil-page-btn-quitar"

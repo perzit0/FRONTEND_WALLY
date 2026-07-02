@@ -19,10 +19,10 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 
 const SECCIONES = {
   RESUMEN: "resumen",
-  MAPA: "mapa",
   GRAFICOS: "graficos",
   USUARIOS: "usuarios",
   DISPOSITIVOS: "dispositivos",
+  METRICAS_ADC: "metricas_adc",
 };
 
 function AdminDashboard() {
@@ -32,6 +32,7 @@ function AdminDashboard() {
   const [dispositivos, setDispositivos] = useState([]);
   const [deviceSeleccionado, setDeviceSeleccionado] = useState(null);
   const [lecturas, setLecturas] = useState([]);
+  const [metricasAdc, setMetricasAdc] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
 
@@ -78,6 +79,16 @@ function AdminDashboard() {
     }
   };
 
+  const cargarMetricasAdc = async (deviceId) => {
+    if (!deviceId) return;
+    try {
+      const res = await client.get(`/admin/metricas-adc/${deviceId}`);
+      setMetricasAdc(res.data);
+    } catch (err) {
+      setError("Error al cargar métricas ADC");
+    }
+  };
+
   useEffect(() => {
     const cargarTodo = async () => {
       setCargando(true);
@@ -90,6 +101,7 @@ function AdminDashboard() {
   useEffect(() => {
     if (deviceSeleccionado) {
       cargarGraficos(deviceSeleccionado);
+      cargarMetricasAdc(deviceSeleccionado);
     }
   }, [deviceSeleccionado]);
 
@@ -190,6 +202,12 @@ function AdminDashboard() {
             Gráficos
           </button>
           <button
+            className={seccion === SECCIONES.METRICAS_ADC ? "activo" : ""}
+            onClick={() => setSeccion(SECCIONES.METRICAS_ADC)}
+          >
+            Métricas ADC
+          </button>
+          <button
             className={seccion === SECCIONES.DISPOSITIVOS ? "activo" : ""}
             onClick={() => setSeccion(SECCIONES.DISPOSITIVOS)}
           >
@@ -267,6 +285,36 @@ function AdminDashboard() {
           </div>
         )}
 
+        {seccion === SECCIONES.METRICAS_ADC && (
+          <div className="admin-graficos">
+            <h1>Métricas crudas ADC (0-4095)</h1>
+
+            <div className="admin-selector">
+              <label>Dispositivo:</label>
+              <select
+                value={deviceSeleccionado || ""}
+                onChange={(e) => setDeviceSeleccionado(e.target.value)}
+              >
+                {dispositivos.map((d) => (
+                  <option key={d.device_id} value={d.device_id}>
+                    {d.nombre || d.device_id}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {metricasAdc ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <TablaMetricaAdc titulo="MQ-7 (CO)" stats={metricasAdc.mq7} />
+                <TablaMetricaAdc titulo="MQ-135 (Calidad del aire)" stats={metricasAdc.mq135} />
+                <TablaMetricaAdc titulo="Sharp GP2Y1010 (Polvo)" stats={metricasAdc.sharp} />
+              </div>
+            ) : (
+              <p className="admin-sin-datos">Cargando métricas...</p>
+            )}
+          </div>
+        )}
+
         {seccion === SECCIONES.DISPOSITIVOS && (
           <div className="admin-tabla-seccion">
             <h1>Dispositivos</h1>
@@ -326,6 +374,49 @@ function AdminDashboard() {
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+function TablaMetricaAdc({ titulo, stats }) {
+  if (!stats) {
+    return (
+      <div className="admin-chart-wrapper">
+        <h3 style={{ marginTop: 0 }}>{titulo}</h3>
+        <p className="admin-sin-datos">Sin datos suficientes</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="admin-chart-wrapper">
+      <h3 style={{ marginTop: 0 }}>{titulo}</h3>
+      <table className="admin-tabla">
+        <thead>
+          <tr>
+            <th>Métrica</th>
+            <th>Valor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Media (cuentas ADC)</td>
+            <td>{stats.media}</td>
+          </tr>
+          <tr>
+            <td>Rango (min - max)</td>
+            <td>{stats.minimo} - {stats.maximo}</td>
+          </tr>
+          <tr>
+            <td>Desviación estándar</td>
+            <td>±{stats.desviacion_estandar}</td>
+          </tr>
+          <tr>
+            <td>Muestras analizadas</td>
+            <td>{stats.muestras}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }

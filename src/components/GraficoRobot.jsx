@@ -12,9 +12,22 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+const opcionesBase = {
+  responsive: true,
+  plugins: {
+    legend: { display: false },
+  },
+  scales: {
+    x: { ticks: { color: "#94a3b8", maxTicksLimit: 6, font: { size: 10 } } },
+    y: { ticks: { color: "#94a3b8" } },
+  },
+};
+
 function GraficoRobot({ lecturas }) {
-  const datos = {
-    labels: lecturas.map((l) => new Date(l.timestamp).toLocaleString()),
+  const labels = lecturas.map((l) => new Date(l.timestamp).toLocaleString());
+
+  const datosCO = {
+    labels,
     datasets: [
       {
         label: "CO (ppm)",
@@ -23,6 +36,12 @@ function GraficoRobot({ lecturas }) {
         backgroundColor: "rgba(239, 68, 68, 0.15)",
         tension: 0.3,
       },
+    ],
+  };
+
+  const datosMQ135 = {
+    labels,
+    datasets: [
       {
         label: "Calidad del aire (MQ135)",
         data: lecturas.map((l) => l.mq135),
@@ -30,6 +49,12 @@ function GraficoRobot({ lecturas }) {
         backgroundColor: "rgba(59, 130, 246, 0.15)",
         tension: 0.3,
       },
+    ],
+  };
+
+  const datosPM = {
+    labels,
+    datasets: [
       {
         label: "PM (µg/m³)",
         data: lecturas.map((l) => l.pm),
@@ -40,18 +65,30 @@ function GraficoRobot({ lecturas }) {
     ],
   };
 
-  const opciones = {
-    responsive: true,
-    plugins: {
-      legend: { position: "top", labels: { color: "#f1f5f9" } },
-    },
-    scales: {
-      x: { ticks: { color: "#94a3b8", maxTicksLimit: 8 } },
-      y: { ticks: { color: "#94a3b8" } },
-    },
-  };
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div>
+        <p style={{ color: "#f1f5f9", fontSize: 13, fontWeight: 600, margin: "0 0 8px 0" }}>
+          CO — Monóxido de carbono
+        </p>
+        <Line data={datosCO} options={opcionesBase} />
+      </div>
 
-  return <Line data={datos} options={opciones} />;
+      <div>
+        <p style={{ color: "#f1f5f9", fontSize: 13, fontWeight: 600, margin: "0 0 8px 0" }}>
+          Calidad del aire (MQ135)
+        </p>
+        <Line data={datosMQ135} options={opcionesBase} />
+      </div>
+
+      <div>
+        <p style={{ color: "#f1f5f9", fontSize: 13, fontWeight: 600, margin: "0 0 8px 0" }}>
+          PM — Material particulado
+        </p>
+        <Line data={datosPM} options={opcionesBase} />
+      </div>
+    </div>
+  );
 }
 
 export default GraficoRobot;

@@ -19,7 +19,8 @@ function PerfilPage() {
     cargando,
     logout,
     actualizarNombre,
-    cambiarPassword,
+    solicitarCambioPassword,
+    confirmarCambioPassword,
     misDispositivos,
     vincularDispositivo,
     editarDispositivo,
@@ -37,6 +38,8 @@ function PerfilPage() {
   // Seguridad
   const [passwordActual, setPasswordActual] = useState("");
   const [passwordNueva, setPasswordNueva] = useState("");
+  const [codigoPassword, setCodigoPassword] = useState("");
+  const [pasoSeguridad, setPasoSeguridad] = useState("inicial"); // inicial | codigo_enviado
   const [mensajePassword, setMensajePassword] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
@@ -82,15 +85,29 @@ function PerfilPage() {
     }
   };
 
+  const pedirCodigo = async () => {
+    setErrorPassword("");
+    setMensajePassword("");
+    try {
+      await solicitarCambioPassword();
+      setMensajePassword("Te enviamos un código a tu correo");
+      setPasoSeguridad("codigo_enviado");
+    } catch (err) {
+      setErrorPassword(err.response?.data?.error || "Error al enviar el código");
+    }
+  };
+
   const guardarPassword = async (e) => {
     e.preventDefault();
     setErrorPassword("");
     setMensajePassword("");
     try {
-      await cambiarPassword(passwordActual, passwordNueva);
+      await confirmarCambioPassword(codigoPassword, passwordActual, passwordNueva);
       setMensajePassword("Contraseña actualizada correctamente");
       setPasswordActual("");
       setPasswordNueva("");
+      setCodigoPassword("");
+      setPasoSeguridad("inicial");
     } catch (err) {
       setErrorPassword(err.response?.data?.error || "Error al cambiar la contraseña");
     }
@@ -127,6 +144,18 @@ function PerfilPage() {
       cargarRobots();
     } catch (err) {
       setErrorRobots("Error al desvincular");
+    }
+  };
+
+  const manejarDescargar = async (device_id) => {
+    try {
+      await exportarMisDatos(device_id);
+    } catch (err) {
+      setErrorRobots(
+        err.response?.status === 403
+          ? "No tienes permiso sobre este robot"
+          : "Error al descargar los datos"
+      );
     }
   };
 
@@ -238,16 +267,9 @@ function PerfilPage() {
                         </div>
                         <div className="perfil-page-robot-acciones">
                           <button onClick={() => setEditando(r.device_id)}>Editar</button>
-                          <button onClick={async () => {
-  try {
-    await exportarMisDatos(r.device_id);
-  } catch (err) {
-    alert("Error al descargar: " + (err.response?.status === 403 ? "no tienes permiso sobre este robot" : "intenta de nuevo"));
-    console.error(err);
-  }
-}}>
-  Descargar datos
-</button>
+                          <button onClick={() => manejarDescargar(r.device_id)}>
+                            Descargar datos
+                          </button>
                           <button
                             onClick={() => manejarDesvincular(r.device_id)}
                             className="perfil-page-btn-quitar"
@@ -270,24 +292,52 @@ function PerfilPage() {
               {errorPassword && <div className="perfil-page-error">{errorPassword}</div>}
               {mensajePassword && <div className="perfil-page-mensaje">{mensajePassword}</div>}
 
-              <form onSubmit={guardarPassword} className="perfil-page-form">
-                <label>Contraseña actual</label>
-                <input
-                  type="password"
-                  value={passwordActual}
-                  onChange={(e) => setPasswordActual(e.target.value)}
-                  required
-                />
-                <label>Nueva contraseña</label>
-                <input
-                  type="password"
-                  value={passwordNueva}
-                  onChange={(e) => setPasswordNueva(e.target.value)}
-                  required
-                  minLength={6}
-                />
-                <button type="submit">Actualizar contraseña</button>
-              </form>
+              {pasoSeguridad === "inicial" && (
+                <button
+                  onClick={pedirCodigo}
+                  style={{
+                    padding: "10px 20px",
+                    background: "#1f4e78",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 6,
+                    cursor: "pointer",
+                    fontSize: 14,
+                    fontWeight: 600,
+                  }}
+                >
+                  Enviar código de verificación
+                </button>
+              )}
+
+              {pasoSeguridad === "codigo_enviado" && (
+                <form onSubmit={guardarPassword} className="perfil-page-form">
+                  <label>Código recibido por correo</label>
+                  <input
+                    type="text"
+                    value={codigoPassword}
+                    onChange={(e) => setCodigoPassword(e.target.value)}
+                    maxLength={6}
+                    required
+                  />
+                  <label>Contraseña actual</label>
+                  <input
+                    type="password"
+                    value={passwordActual}
+                    onChange={(e) => setPasswordActual(e.target.value)}
+                    required
+                  />
+                  <label>Nueva contraseña</label>
+                  <input
+                    type="password"
+                    value={passwordNueva}
+                    onChange={(e) => setPasswordNueva(e.target.value)}
+                    required
+                    minLength={6}
+                  />
+                  <button type="submit">Actualizar contraseña</button>
+                </form>
+              )}
             </div>
           )}
         </main>

@@ -93,8 +93,14 @@ export function AuthProvider({ children }) {
     return res.data;
   };
 
-  const cambiarPassword = async (password_actual, password_nueva) => {
-    const res = await client.put("/perfil/cambiar-password", {
+  const solicitarCambioPassword = async () => {
+    const res = await client.post("/perfil/solicitar-cambio-password");
+    return res.data;
+  };
+
+  const confirmarCambioPassword = async (codigo, password_actual, password_nueva) => {
+    const res = await client.put("/perfil/confirmar-cambio-password", {
+      codigo,
       password_actual,
       password_nueva,
     });
@@ -135,7 +141,8 @@ export function AuthProvider({ children }) {
 
         // Perfil
         actualizarNombre,
-        cambiarPassword,
+        solicitarCambioPassword,
+        confirmarCambioPassword,
         exportarMisDatos,
 
         estaAutenticado: !!usuario,

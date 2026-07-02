@@ -11,7 +11,8 @@ const GASES = {
     niveles: [
       { rango: "0 - 9", nivel: "Bueno", color: "#22c55e", detalle: "Sin efecto, nivel típico de interior" },
       { rango: "9 - 35", nivel: "Moderado", color: "#f59e0b", detalle: "Límite permitido en ambientes laborales (OSHA)" },
-      { rango: "> 35", nivel: "Malo", color: "#ef4444", detalle: "Dolor de cabeza, mareo con exposición prolongada" },
+      { rango: "35 - 60", nivel: "Malo", color: "#ef4444", detalle: "Dolor de cabeza, mareo con exposición prolongada" },
+      { rango: "> 60", nivel: "Crítico", color: "#991b1b", detalle: "Riesgo de inconsciencia con exposición prolongada" },
     ],
   },
   mq135: {
@@ -35,7 +36,8 @@ const GASES = {
     niveles: [
       { rango: "0 - 12", nivel: "Bueno", color: "#22c55e", detalle: "Calidad de aire satisfactoria" },
       { rango: "12 - 35.4", nivel: "Moderado", color: "#f59e0b", detalle: "Grupos sensibles pueden notar síntomas leves" },
-      { rango: "> 35.4", nivel: "Malo", color: "#ef4444", detalle: "No saludable, evitar exposición prolongada" },
+      { rango: "35.4 - 55", nivel: "Malo", color: "#ef4444", detalle: "No saludable, evitar exposición prolongada" },
+      { rango: "> 55", nivel: "Crítico", color: "#991b1b", detalle: "Toda la población: evitar exposición" },
     ],
   },
 };
@@ -65,7 +67,7 @@ function GasInfoTabs() {
         <table className="gas-tab-tabla">
           <thead>
             <tr>
-              <th>Rango ({gas.unidad})</th>
+              <th>{gas.unidad ? `Rango (${gas.unidad})` : "Nivel"}</th>
               <th>Nivel</th>
               <th>Interpretación</th>
             </tr>

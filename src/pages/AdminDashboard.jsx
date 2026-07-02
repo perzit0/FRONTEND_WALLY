@@ -138,40 +138,28 @@ function AdminDashboard() {
     }
   };
 
-  const datosGrafico = {
-    labels: lecturas.map((l) => new Date(l.timestamp).toLocaleTimeString("es-PE", { timeZone: "America/Lima" })),
+  const crearDatosGrafico = (campo, color, label) => ({
+    labels: lecturas.map((l) =>
+      new Date(l.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })
+    ),
     datasets: [
       {
-        label: "CO (ppm)",
-        data: lecturas.map((l) => l.co),
-        borderColor: "#ef4444",
-        backgroundColor: "rgba(239, 68, 68, 0.15)",
-        tension: 0.3,
-      },
-      {
-        label: "MQ135",
-        data: lecturas.map((l) => l.mq135),
-        borderColor: "#3b82f6",
-        backgroundColor: "rgba(59, 130, 246, 0.15)",
-        tension: 0.3,
-      },
-      {
-        label: "PM (µg/m³)",
-        data: lecturas.map((l) => l.pm),
-        borderColor: "#f59e0b",
-        backgroundColor: "rgba(245, 158, 11, 0.15)",
+        label,
+        data: lecturas.map((l) => l[campo]),
+        borderColor: color,
+        backgroundColor: color + "26",
         tension: 0.3,
       },
     ],
-  };
+  });
 
   const opcionesGrafico = {
     responsive: true,
     plugins: {
-      legend: { position: "top", labels: { color: "#f1f5f9" } },
+      legend: { display: false },
     },
     scales: {
-      x: { ticks: { color: "#94a3b8" } },
+      x: { ticks: { color: "#94a3b8", maxTicksLimit: 6, font: { size: 10 } } },
       y: { ticks: { color: "#94a3b8" } },
     },
   };
@@ -276,8 +264,19 @@ function AdminDashboard() {
             </div>
 
             {lecturas.length > 0 ? (
-              <div className="admin-chart-wrapper">
-                <Line data={datosGrafico} options={opcionesGrafico} />
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <div className="admin-chart-wrapper">
+                  <h3 style={{ marginTop: 0, color: "#f1f5f9" }}>CO (ppm)</h3>
+                  <Line data={crearDatosGrafico("co", "#ef4444", "CO")} options={opcionesGrafico} />
+                </div>
+                <div className="admin-chart-wrapper">
+                  <h3 style={{ marginTop: 0, color: "#f1f5f9" }}>Calidad del aire (MQ135)</h3>
+                  <Line data={crearDatosGrafico("mq135", "#3b82f6", "MQ135")} options={opcionesGrafico} />
+                </div>
+                <div className="admin-chart-wrapper">
+                  <h3 style={{ marginTop: 0, color: "#f1f5f9" }}>PM (µg/m³)</h3>
+                  <Line data={crearDatosGrafico("pm", "#f59e0b", "PM")} options={opcionesGrafico} />
+                </div>
               </div>
             ) : (
               <p className="admin-sin-datos">No hay lecturas para este dispositivo</p>
@@ -331,7 +330,11 @@ function AdminDashboard() {
                   <tr key={d.id}>
                     <td>{d.device_id}</td>
                     <td>{d.nombre || "-"}</td>
-                    <td>{new Date(d.creado_en).toLocaleDateString()}</td>
+                    <td>
+                      {d.creado_en
+                        ? new Date(d.creado_en).toLocaleDateString("es-PE", { timeZone: "America/Lima" })
+                        : "-"}
+                    </td>
                   </tr>
                 ))}
               </tbody>

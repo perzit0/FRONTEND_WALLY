@@ -1,13 +1,11 @@
 import Mapa from "../components/Mapa";
 import IconoPersona from "../components/IconoPersona";
-import AlertaBanner from "../components/AlertaBanner";
 import GasInfoTabs from "../components/GasInfoTabs";
 import "../styles/Home.css";
 
 function Home() {
   return (
     <div className="home-container">
-      <AlertaBanner />
       <IconoPersona />
 
       <header className="home-header">

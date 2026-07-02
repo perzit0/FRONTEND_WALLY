@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/PerfilPage.css";
+import GraficoRobot from "../components/GraficoRobot";
 
 const COLORES = ["#38bdf8", "#22c55e", "#f59e0b", "#ef4444", "#a855f7", "#ec4899"];
 
@@ -26,6 +27,7 @@ function PerfilPage() {
     editarDispositivo,
     desvincularDispositivo,
     exportarMisDatos,
+    graficosMiRobot,
   } = useAuth();
 
   const [seccion, setSeccion] = useState(SECCIONES.CUENTA);
@@ -39,7 +41,7 @@ function PerfilPage() {
   const [passwordActual, setPasswordActual] = useState("");
   const [passwordNueva, setPasswordNueva] = useState("");
   const [codigoPassword, setCodigoPassword] = useState("");
-  const [pasoSeguridad, setPasoSeguridad] = useState("inicial"); // inicial | codigo_enviado
+  const [pasoSeguridad, setPasoSeguridad] = useState("inicial");
   const [mensajePassword, setMensajePassword] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
 
@@ -49,6 +51,11 @@ function PerfilPage() {
   const [editando, setEditando] = useState(null);
   const [errorRobots, setErrorRobots] = useState("");
   const [mensajeRobots, setMensajeRobots] = useState("");
+
+  // Graficos
+  const [graficoAbierto, setGraficoAbierto] = useState(null);
+  const [datosGrafico, setDatosGrafico] = useState([]);
+  const [cargandoGrafico, setCargandoGrafico] = useState(false);
 
   useEffect(() => {
     if (!cargando && !estaAutenticado) {
@@ -159,6 +166,23 @@ function PerfilPage() {
     }
   };
 
+  const toggleGrafico = async (device_id) => {
+    if (graficoAbierto === device_id) {
+      setGraficoAbierto(null);
+      return;
+    }
+    setCargandoGrafico(true);
+    setGraficoAbierto(device_id);
+    try {
+      const data = await graficosMiRobot(device_id);
+      setDatosGrafico(data);
+    } catch (err) {
+      setErrorRobots("Error al cargar el gráfico");
+    } finally {
+      setCargandoGrafico(false);
+    }
+  };
+
   if (cargando || !usuario) return <div className="perfil-page-loading">Cargando...</div>;
 
   return (
@@ -246,7 +270,11 @@ function PerfilPage() {
 
               <div className="perfil-page-robots-lista">
                 {robots.map((r) => (
-                  <div key={r.device_id} className="perfil-page-robot-card">
+                  <div
+                    key={r.device_id}
+                    className="perfil-page-robot-card"
+                    style={{ flexDirection: "column", alignItems: "stretch" }}
+                  >
                     {editando === r.device_id ? (
                       <EditorRobotPage
                         robot={r}
@@ -255,28 +283,55 @@ function PerfilPage() {
                       />
                     ) : (
                       <>
-                        <div className="perfil-page-robot-info">
-                          <span
-                            className="perfil-page-robot-color"
-                            style={{ backgroundColor: r.color }}
-                          ></span>
-                          <div>
-                            <p className="perfil-page-robot-nombre">{r.nombre || r.device_id}</p>
-                            <p className="perfil-page-robot-id">{r.device_id}</p>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            flexWrap: "wrap",
+                            gap: 12,
+                          }}
+                        >
+                          <div className="perfil-page-robot-info">
+                            <span
+                              className="perfil-page-robot-color"
+                              style={{ backgroundColor: r.color }}
+                            ></span>
+                            <div>
+                              <p className="perfil-page-robot-nombre">{r.nombre || r.device_id}</p>
+                              <p className="perfil-page-robot-id">{r.device_id}</p>
+                            </div>
+                          </div>
+                          <div className="perfil-page-robot-acciones">
+                            <button onClick={() => setEditando(r.device_id)}>Editar</button>
+                            <button onClick={() => toggleGrafico(r.device_id)}>
+                              {graficoAbierto === r.device_id ? "Ocultar gráfico" : "Ver gráfico"}
+                            </button>
+                            <button onClick={() => manejarDescargar(r.device_id)}>
+                              Descargar datos
+                            </button>
+                            <button
+                              onClick={() => manejarDesvincular(r.device_id)}
+                              className="perfil-page-btn-quitar"
+                            >
+                              Desvincular
+                            </button>
                           </div>
                         </div>
-                        <div className="perfil-page-robot-acciones">
-                          <button onClick={() => setEditando(r.device_id)}>Editar</button>
-                          <button onClick={() => manejarDescargar(r.device_id)}>
-                            Descargar datos
-                          </button>
-                          <button
-                            onClick={() => manejarDesvincular(r.device_id)}
-                            className="perfil-page-btn-quitar"
-                          >
-                            Desvincular
-                          </button>
-                        </div>
+
+                        {graficoAbierto === r.device_id && (
+                          <div style={{ marginTop: 16, background: "#0f172a", padding: 16, borderRadius: 8 }}>
+                            {cargandoGrafico ? (
+                              <p style={{ color: "#94a3b8", fontSize: 13 }}>Cargando gráfico...</p>
+                            ) : datosGrafico.length === 0 ? (
+                              <p style={{ color: "#94a3b8", fontSize: 13 }}>
+                                Aún no hay historial suficiente para graficar
+                              </p>
+                            ) : (
+                              <GraficoRobot lecturas={datosGrafico} />
+                            )}
+                          </div>
+                        )}
                       </>
                     )}
                   </div>

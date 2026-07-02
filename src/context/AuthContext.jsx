@@ -118,11 +118,17 @@ export function AuthProvider({ children }) {
     link.remove();
   };
 
+  const graficosMiRobot = async (device_id) => {
+    const res = await client.get(`/perfil/graficos/${device_id}`);
+    return res.data;
+  };
+
   return (
     <AuthContext.Provider
       value={{
         usuario,
         cargando,
+        graficosMiRobot,
 
         // Auth
         login,

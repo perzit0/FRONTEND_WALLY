@@ -1,7 +1,7 @@
 import Mapa from "../components/Mapa";
 import IconoPersona from "../components/IconoPersona";
 import GasInfoTabs from "../components/GasInfoTabs";
-import IndiceCalidadAire from "../components/IndiceCalidadAire";
+import RankingZonas from "../components/RankingZonas";
 import "../styles/Home.css";
 
 function Home() {
@@ -14,13 +14,12 @@ function Home() {
         <p>Monitoreo de calidad del aire en tiempo real</p>
       </header>
 
-      <IndiceCalidadAire />
-
       <div className="home-mapa-wrapper">
         <Mapa />
       </div>
 
       <section className="home-info">
+        <RankingZonas />
         <GasInfoTabs />
       </section>
     </div>

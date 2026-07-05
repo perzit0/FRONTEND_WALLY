@@ -1,21 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Line } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import TarjetaGrafico from "../components/TarjetaGrafico";
 import "../styles/AdminDashboard.css";
-
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const SECCIONES = {
   RESUMEN: "resumen",
@@ -23,6 +13,7 @@ const SECCIONES = {
   USUARIOS: "usuarios",
   DISPOSITIVOS: "dispositivos",
   METRICAS_ADC: "metricas_adc",
+  MONITOREOS: "monitoreos",
 };
 
 function AdminDashboard() {
@@ -35,6 +26,9 @@ function AdminDashboard() {
   const [metricasAdc, setMetricasAdc] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState("");
+  const [generandoPdf, setGenerandoPdf] = useState(false);
+
+  const graficosRef = useRef(null);
 
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
@@ -105,19 +99,23 @@ function AdminDashboard() {
     }
   }, [deviceSeleccionado]);
 
+  const descargarBlob = (blob, nombreArchivo) => {
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", nombreArchivo);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
   const exportarHistorial = async () => {
     if (!deviceSeleccionado) return;
     try {
       const res = await client.get(`/admin/exportar/historial/${deviceSeleccionado}`, {
         responseType: "blob",
       });
-      const url = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", `historial_${deviceSeleccionado}.xlsx`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      descargarBlob(res.data, `historial_${deviceSeleccionado}.xlsx`);
     } catch (err) {
       setError("Error al exportar historial");
     }
@@ -126,43 +124,38 @@ function AdminDashboard() {
   const exportarUsuarios = async () => {
     try {
       const res = await client.get("/admin/exportar/usuarios", { responseType: "blob" });
-      const url = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "usuarios_wally.xlsx");
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
+      descargarBlob(res.data, "usuarios_wally.xlsx");
     } catch (err) {
       setError("Error al exportar usuarios");
     }
   };
 
-  const crearDatosGrafico = (campo, color, label) => ({
-    labels: lecturas.map((l) =>
-      new Date(l.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })
-    ),
-    datasets: [
-      {
-        label,
-        data: lecturas.map((l) => l[campo]),
-        borderColor: color,
-        backgroundColor: color + "26",
-        tension: 0.3,
-      },
-    ],
-  });
-
-  const opcionesGrafico = {
-    responsive: true,
-    plugins: {
-      legend: { display: false },
-    },
-    scales: {
-      x: { ticks: { color: "#94a3b8", maxTicksLimit: 6, font: { size: 10 } } },
-      y: { ticks: { color: "#94a3b8" } },
-    },
+  const exportarGraficosPdf = async () => {
+    if (!graficosRef.current) return;
+    setGenerandoPdf(true);
+    try {
+      const canvas = await html2canvas(graficosRef.current, { backgroundColor: "#ffffff", scale: 2 });
+      const imagen = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+      const anchoPagina = pdf.internal.pageSize.getWidth();
+      const altoImagen = (canvas.height * anchoPagina) / canvas.width;
+      pdf.setFontSize(14);
+      pdf.text(`Reporte de sensores - ${deviceSeleccionado}`, 40, 30);
+      pdf.addImage(imagen, "PNG", 0, 45, anchoPagina, altoImagen);
+      pdf.save(`graficos_${deviceSeleccionado}.pdf`);
+    } finally {
+      setGenerandoPdf(false);
+    }
   };
+
+  const labelsLecturas = lecturas.map((l) =>
+    new Date(l.timestamp).toLocaleString("es-PE", {
+      timeZone: "America/Lima",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+  );
+  const ultimaLectura = lecturas[lecturas.length - 1];
 
   if (cargando) {
     return <div className="admin-loading">Cargando panel...</div>;
@@ -259,24 +252,45 @@ function AdminDashboard() {
                 ))}
               </select>
               <button onClick={exportarHistorial} className="admin-btn-exportar">
-                Exportar historial (Excel)
+                Excel
+              </button>
+              <button onClick={exportarGraficosPdf} className="admin-btn-exportar" disabled={generandoPdf}>
+                {generandoPdf ? "Generando..." : "PDF"}
               </button>
             </div>
 
             {lecturas.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <div className="admin-chart-wrapper">
-                  <h3 style={{ marginTop: 0, color: "#f1f5f9" }}>CO (ppm)</h3>
-                  <Line data={crearDatosGrafico("co", "#ef4444", "CO")} options={opcionesGrafico} />
-                </div>
-                <div className="admin-chart-wrapper">
-                  <h3 style={{ marginTop: 0, color: "#f1f5f9" }}>Calidad del aire (MQ135)</h3>
-                  <Line data={crearDatosGrafico("mq135", "#3b82f6", "MQ135")} options={opcionesGrafico} />
-                </div>
-                <div className="admin-chart-wrapper">
-                  <h3 style={{ marginTop: 0, color: "#f1f5f9" }}>PM (µg/m³)</h3>
-                  <Line data={crearDatosGrafico("pm", "#f59e0b", "PM")} options={opcionesGrafico} />
-                </div>
+              <div className="admin-grid-graficos" ref={graficosRef}>
+                <TarjetaGrafico
+                  titulo="Monóxido de carbono"
+                  subtitulo="Sensor MQ-7"
+                  color="#ef4444"
+                  unidad="ppm"
+                  labels={labelsLecturas}
+                  valores={lecturas.map((l) => l.co)}
+                  valorActual={ultimaLectura?.co}
+                  alto={200}
+                />
+                <TarjetaGrafico
+                  titulo="Calidad del aire"
+                  subtitulo="Sensor MQ-135"
+                  color="#3b82f6"
+                  unidad="ppm"
+                  labels={labelsLecturas}
+                  valores={lecturas.map((l) => l.mq135)}
+                  valorActual={ultimaLectura?.mq135}
+                  alto={200}
+                />
+                <TarjetaGrafico
+                  titulo="Material particulado"
+                  subtitulo="Sensor Sharp PM2.5"
+                  color="#f59e0b"
+                  unidad="µg/m³"
+                  labels={labelsLecturas}
+                  valores={lecturas.map((l) => l.pm)}
+                  valorActual={ultimaLectura?.pm}
+                  alto={200}
+                />
               </div>
             ) : (
               <p className="admin-sin-datos">No hay lecturas para este dispositivo</p>
@@ -385,7 +399,7 @@ function TablaMetricaAdc({ titulo, stats }) {
   if (!stats) {
     return (
       <div className="admin-chart-wrapper">
-        <h3 style={{ marginTop: 0 }}>{titulo}</h3>
+        <h3>{titulo}</h3>
         <p className="admin-sin-datos">Sin datos suficientes</p>
       </div>
     );
@@ -393,7 +407,7 @@ function TablaMetricaAdc({ titulo, stats }) {
 
   return (
     <div className="admin-chart-wrapper">
-      <h3 style={{ marginTop: 0 }}>{titulo}</h3>
+      <h3>{titulo}</h3>
       <table className="admin-tabla">
         <thead>
           <tr>

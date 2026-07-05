@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
 import L from "leaflet";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
@@ -64,6 +64,7 @@ function colorPorNivel(nivel) {
 
 function Mapa() {
   const [dispositivos, setDispositivos] = useState([]);
+  const [zonas, setZonas] = useState([]);
   const [monitoreoAbierto, setMonitoreoAbierto] = useState(null);
   const { estaAutenticado } = useAuth();
 
@@ -76,9 +77,22 @@ function Mapa() {
     }
   };
 
+  const cargarZonas = async () => {
+    try {
+      const res = await client.get("/monitoreo/publico/zonas");
+      setZonas(res.data);
+    } catch (err) {
+      console.error("Error al cargar zonas monitoreadas:", err);
+    }
+  };
+
   useEffect(() => {
     cargarDispositivos();
-    const intervalo = setInterval(cargarDispositivos, 10000);
+    cargarZonas();
+    const intervalo = setInterval(() => {
+      cargarDispositivos();
+      cargarZonas();
+    }, 20000);
     return () => clearInterval(intervalo);
   }, []);
 
@@ -93,6 +107,37 @@ function Mapa() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
+
+      {zonas.map((z) => (
+        <Circle
+          key={`zona-${z.id}`}
+          center={[z.centro_lat, z.centro_lng]}
+          radius={z.radio_metros || 15}
+          pathOptions={{
+            color: z.color_hex || "#9ca3af",
+            fillColor: z.color_hex || "#9ca3af",
+            fillOpacity: 0.32,
+            weight: 1.5,
+          }}
+        >
+          <Popup>
+            <div style={{ minWidth: 180 }}>
+              <strong>{z.nombre || "Zona monitoreada"}</strong>
+              <p style={{ margin: "6px 0 2px 0" }}>
+                <span style={{ fontWeight: 600, color: colorPorNivel(z.nivel_color) }}>
+                  {z.nivel_color ? z.nivel_color.toUpperCase() : "SIN DATOS"}
+                </span>
+              </p>
+              <p style={{ margin: "2px 0", fontSize: 12 }}>CO: {z.promedio_co ?? "S/D"} ppm</p>
+              <p style={{ margin: "2px 0", fontSize: 12 }}>MQ135: {z.promedio_mq135 ?? "S/D"}</p>
+              <p style={{ margin: "2px 0", fontSize: 12 }}>PM: {z.promedio_pm ?? "S/D"} µg/m³</p>
+              <p style={{ margin: "6px 0 0 0", fontSize: 11, color: "#9ca3af" }}>
+                {z.hora_fin ? new Date(z.hora_fin).toLocaleString("es-PE", { timeZone: "America/Lima" }) : ""}
+              </p>
+            </div>
+          </Popup>
+        </Circle>
+      ))}
 
       {dispositivos.map((d) => {
         if (!d.ultima_lectura || d.ultima_lectura.lat === null) return null;
@@ -143,7 +188,7 @@ function Mapa() {
     </p>
 
     <p style={{ margin: "4px 0 0 0", fontSize: 11, color: "#6b7280" }}>
-      ÚÚltima lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })}
+      Última lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })}
     </p>
 
     <button

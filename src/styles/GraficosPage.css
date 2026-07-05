@@ -82,6 +82,17 @@
   display: inline-block;
 }
 
+.chip-robot-pdf {
+  background: #0ea5e9;
+  color: #ffffff;
+  border-color: #0ea5e9;
+}
+
+.chip-robot-pdf:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .graficos-page-contenido {
   max-width: 900px;
   margin: 0 auto;

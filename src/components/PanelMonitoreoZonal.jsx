@@ -133,7 +133,7 @@ function PanelMonitoreoZonal({ deviceId }) {
   const descargarPdf = async () => {
     if (!resultadoRef.current) return;
     const canvas = await html2canvas(resultadoRef.current, {
-      backgroundColor: "#0f172a",
+      backgroundColor: "#ffffff",
       scale: 2,
     });
     const imagen = canvas.toDataURL("image/png");

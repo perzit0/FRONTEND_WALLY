@@ -1,12 +1,13 @@
 .panel-monitoreo {
-  background: #0f172a;
-  border: 1px solid #1e293b;
-  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid #e0f2fe;
+  border-radius: 14px;
   padding: 18px;
-  color: #f1f5f9;
+  color: #1e293b;
   max-width: 900px;
-  margin: 20px auto;
+  margin: 16px auto;
   box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.08);
 }
 
 .panel-monitoreo-header {
@@ -21,24 +22,24 @@
 .panel-monitoreo-header h3 {
   margin: 0;
   font-size: 17px;
-  color: #38bdf8;
+  color: #0284c7;
   letter-spacing: 0.5px;
 }
 
 .badge-activo {
   font-size: 12px;
   font-weight: 600;
-  color: #22c55e;
+  color: #15803d;
   background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.4);
+  border: 1px solid rgba(34, 197, 94, 0.35);
   padding: 4px 10px;
   border-radius: 20px;
 }
 
 .panel-monitoreo-error {
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 13px;
@@ -52,9 +53,9 @@
 }
 
 .input-nombre-monitoreo {
-  background: #1e293b;
-  border: 1px solid #334155;
-  color: #f1f5f9;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #1e293b;
   padding: 10px 12px;
   border-radius: 8px;
   font-size: 14px;
@@ -62,7 +63,7 @@
 }
 
 .input-nombre-monitoreo:focus {
-  border-color: #38bdf8;
+  border-color: #0ea5e9;
 }
 
 .btn-verificar-gps,
@@ -89,14 +90,14 @@
 }
 
 .btn-verificar-gps {
-  background: #1e293b;
-  color: #38bdf8;
-  border: 1px solid #334155;
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid #bae6fd;
 }
 
 .btn-iniciar-monitoreo {
   background: #22c55e;
-  color: #062e14;
+  color: #ffffff;
 }
 
 .btn-iniciar-monitoreo:disabled,
@@ -119,15 +120,15 @@
 }
 
 .estado-gps.gps-ok {
-  background: rgba(34, 197, 94, 0.12);
-  color: #86efac;
-  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
 }
 
 .estado-gps.gps-mal {
-  background: rgba(245, 158, 11, 0.12);
-  color: #fcd34d;
-  border: 1px solid rgba(245, 158, 11, 0.35);
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
 }
 
 .mapa-monitoreo-wrapper,
@@ -146,7 +147,7 @@
 
 .panel-monitoreo-resultado h4 {
   margin: 0 0 10px 0;
-  color: #f1f5f9;
+  color: #0f172a;
   font-size: 15px;
 }
 
@@ -158,8 +159,8 @@
 }
 
 .metrica-card {
-  background: #1e293b;
-  border: 1px solid #334155;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 10px 12px;
   display: flex;
@@ -177,7 +178,7 @@
 .metrica-valor {
   font-size: 16px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: #0f172a;
 }
 
 .resultado-botones {
@@ -192,14 +193,14 @@
 
 .btn-descargar-excel,
 .btn-descargar-pdf {
-  background: #38bdf8;
-  color: #062e14;
+  background: #0ea5e9;
+  color: #ffffff;
 }
 
 .btn-nuevo-monitoreo {
-  background: #1e293b;
-  color: #f1f5f9;
-  border: 1px solid #334155;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
 }
 
 @media (max-width: 480px) {

@@ -123,6 +123,22 @@ export function AuthProvider({ children }) {
     return res.data;
   };
 
+  const actualizarFoto = async (foto_base64) => {
+    const res = await client.put("/perfil/actualizar-foto", { foto_base64 });
+    const usuarioActualizado = res.data.usuario;
+    localStorage.setItem("wally_usuario", JSON.stringify(usuarioActualizado));
+    setUsuario(usuarioActualizado);
+    return res.data;
+  };
+
+  const eliminarFoto = async () => {
+    const res = await client.delete("/perfil/eliminar-foto");
+    const usuarioActualizado = res.data.usuario;
+    localStorage.setItem("wally_usuario", JSON.stringify(usuarioActualizado));
+    setUsuario(usuarioActualizado);
+    return res.data;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -150,6 +166,8 @@ export function AuthProvider({ children }) {
         solicitarCambioPassword,
         confirmarCambioPassword,
         exportarMisDatos,
+        actualizarFoto,
+        eliminarFoto,
 
         estaAutenticado: !!usuario,
         esAdmin: usuario?.rol === "admin",

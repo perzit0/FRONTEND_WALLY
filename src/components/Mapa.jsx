@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import client from "../api/client";
+import { useAuth } from "../context/AuthContext";
+import PanelMonitoreoZonal from "./PanelMonitoreoZonal";
 
 const CENTRO_LIMA = [-12.07, -77.06];
 
@@ -62,6 +64,8 @@ function colorPorNivel(nivel) {
 
 function Mapa() {
   const [dispositivos, setDispositivos] = useState([]);
+  const [monitoreoAbierto, setMonitoreoAbierto] = useState(null);
+  const { estaAutenticado } = useAuth();
 
   const cargarDispositivos = async () => {
     try {
@@ -79,6 +83,7 @@ function Mapa() {
   }, []);
 
   return (
+    <>
     <MapContainer
       center={CENTRO_LIMA}
       zoom={12}
@@ -140,12 +145,37 @@ function Mapa() {
     <p style={{ margin: "4px 0 0 0", fontSize: 11, color: "#6b7280" }}>
       ÚÚltima lectura: {new Date(d.ultima_lectura.timestamp).toLocaleString("es-PE", { timeZone: "America/Lima" })}
     </p>
+
+    <button
+      className="popup-btn-monitoreo"
+      onClick={() => {
+        if (!estaAutenticado) {
+          alert("Inicia sesión para poder usar el monitoreo zonal.");
+          return;
+        }
+        setMonitoreoAbierto(d.device_id);
+      }}
+    >
+      Monitoreo zonal
+    </button>
   </div>
 </Popup>
           </Marker>
         );
       })}
     </MapContainer>
+
+    {monitoreoAbierto && (
+      <div className="modal-monitoreo-overlay" onClick={() => setMonitoreoAbierto(null)}>
+        <div className="modal-monitoreo-contenido" onClick={(e) => e.stopPropagation()}>
+          <button className="modal-monitoreo-cerrar" onClick={() => setMonitoreoAbierto(null)}>
+            ✕
+          </button>
+          <PanelMonitoreoZonal deviceId={monitoreoAbierto} />
+        </div>
+      </div>
+    )}
+    </>
   );
 }
 

@@ -1,7 +1,7 @@
 .perfil-page {
   min-height: 100vh;
-  background-color: #0f172a;
-  color: #f1f5f9;
+  background-color: #f8fafc;
+  color: #1e293b;
 }
 
 .perfil-page-loading {
@@ -9,28 +9,31 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .perfil-page-header {
   padding: 20px 24px;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
   gap: 20px;
+  background: #ffffff;
 }
 
 .perfil-page-volver {
   background: none;
   border: none;
-  color: #38bdf8;
+  color: #0284c7;
   font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .perfil-page-header h1 {
   margin: 0;
   font-size: 20px;
+  color: #0c4a6e;
 }
 
 .perfil-page-body {
@@ -44,7 +47,8 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  border-right: 1px solid #1e293b;
+  border-right: 1px solid #e2e8f0;
+  background: #ffffff;
 }
 
 .perfil-page-nav button {
@@ -53,31 +57,31 @@
   background: transparent;
   border: none;
   border-radius: 6px;
-  color: #cbd5e1;
+  color: #475569;
   font-size: 14px;
   cursor: pointer;
 }
 
 .perfil-page-nav button:hover {
-  background: #1e293b;
+  background: #f1f5f9;
 }
 
 .perfil-page-nav button.activo {
-  background: #1f4e78;
+  background: #0ea5e9;
   color: #fff;
   font-weight: 600;
 }
 
 .perfil-page-admin-link {
   margin-top: 12px;
-  background: #334155 !important;
-  color: #f1f5f9 !important;
+  background: #e0f2fe !important;
+  color: #0369a1 !important;
 }
 
 .perfil-page-logout {
   margin-top: auto;
-  background: #7f1d1d !important;
-  color: #fff !important;
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
 }
 
 .perfil-page-content {
@@ -89,17 +93,18 @@
 .perfil-seccion h2 {
   margin: 0 0 4px 0;
   font-size: 20px;
+  color: #0f172a;
 }
 
 .perfil-seccion-subtexto {
-  color: #94a3b8;
+  color: #64748b;
   font-size: 13px;
   margin: 0 0 20px 0;
 }
 
 .perfil-page-error {
-  background: #7f1d1d;
-  color: #fecaca;
+  background: #fee2e2;
+  color: #b91c1c;
   padding: 10px 14px;
   border-radius: 6px;
   font-size: 13px;
@@ -107,8 +112,8 @@
 }
 
 .perfil-page-mensaje {
-  background: #14532d;
-  color: #bbf7d0;
+  background: #dcfce7;
+  color: #15803d;
   padding: 10px 14px;
   border-radius: 6px;
   font-size: 13px;
@@ -124,23 +129,23 @@
 
 .perfil-page-form label {
   font-size: 13px;
-  color: #94a3b8;
+  color: #64748b;
   margin-top: 8px;
 }
 
 .perfil-page-form input {
   padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #334155;
-  background: #1e293b;
-  color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #1e293b;
   font-size: 14px;
 }
 
 .perfil-page-form button {
   margin-top: 14px;
   padding: 10px;
-  background: #1f4e78;
+  background: #0ea5e9;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -161,15 +166,15 @@
   flex: 1;
   padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #334155;
-  background: #1e293b;
-  color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  color: #1e293b;
   font-size: 14px;
 }
 
 .perfil-page-form-inline button {
   padding: 10px 16px;
-  background: #1f4e78;
+  background: #0ea5e9;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -185,7 +190,8 @@
 }
 
 .perfil-page-robot-card {
-  background: #1e293b;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   border-radius: 10px;
   padding: 16px;
   display: flex;
@@ -193,6 +199,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .perfil-page-robot-info {
@@ -212,12 +219,13 @@
   margin: 0;
   font-weight: 600;
   font-size: 14px;
+  color: #0f172a;
 }
 
 .perfil-page-robot-id {
   margin: 2px 0 0 0;
   font-size: 12px;
-  color: #94a3b8;
+  color: #64748b;
 }
 
 .perfil-page-robot-acciones {
@@ -228,17 +236,22 @@
 
 .perfil-page-robot-acciones button {
   padding: 6px 12px;
-  background: #334155;
-  color: #f1f5f9;
-  border: none;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
   font-size: 12px;
   cursor: pointer;
 }
 
+.perfil-page-robot-acciones button:hover {
+  background: #e0f2fe;
+}
+
 .perfil-page-btn-quitar {
-  background: #7f1d1d !important;
-  color: #fff !important;
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  border-color: #fecaca !important;
 }
 
 .perfil-page-editor-robot {
@@ -251,9 +264,9 @@
 .perfil-page-editor-robot input {
   padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #334155;
-  background: #0f172a;
-  color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #1e293b;
   font-size: 13px;
 }
 
@@ -271,7 +284,7 @@
 }
 
 .perfil-page-swatch.seleccionado {
-  border-color: #f1f5f9;
+  border-color: #0f172a;
 }
 
 .perfil-page-editor-botones {
@@ -285,10 +298,11 @@
   border-radius: 6px;
   font-size: 12px;
   cursor: pointer;
-  background: #1f4e78;
+  background: #0ea5e9;
   color: #fff;
 }
 
 .perfil-page-btn-cancelar {
-  background: #334155 !important;
+  background: #f1f5f9 !important;
+  color: #334155 !important;
 }

@@ -15,7 +15,13 @@ function IconoPersona() {
         onClick={() => setModalAbierto(!modalAbierto)}
         title={estaAutenticado ? usuario.nombre : "Iniciar sesión"}
       >
-        {estaAutenticado ? usuario.nombre.charAt(0).toUpperCase() : "👤"}
+        {estaAutenticado && usuario.foto_base64 ? (
+          <img src={usuario.foto_base64} alt={usuario.nombre} className="icono-persona-foto" />
+        ) : estaAutenticado ? (
+          usuario.nombre.charAt(0).toUpperCase()
+        ) : (
+          "👤"
+        )}
       </button>
 
       {modalAbierto && !estaAutenticado && (

@@ -1,8 +1,10 @@
 .gas-tabs-container {
-  background: #1e293b;
-  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #e0f2fe;
+  border-radius: 14px;
   padding: 20px;
   margin-top: 20px;
+  box-shadow: 0 2px 12px rgba(2, 132, 199, 0.06);
 }
 
 .gas-tabs-botones {
@@ -14,8 +16,8 @@
 
 .gas-tab-btn {
   padding: 8px 16px;
-  background: #334155;
-  color: #cbd5e1;
+  background: #f1f5f9;
+  color: #475569;
   border: none;
   border-radius: 6px;
   font-size: 13px;
@@ -25,23 +27,23 @@
 }
 
 .gas-tab-btn:hover {
-  background: #475569;
+  background: #e0f2fe;
 }
 
 .gas-tab-btn.activo {
-  background: #1f4e78;
+  background: #0ea5e9;
   color: #fff;
 }
 
 .gas-tab-contenido h3 {
   margin: 0 0 8px 0;
   font-size: 16px;
-  color: #f1f5f9;
+  color: #0f172a;
 }
 
 .gas-tab-descripcion {
   font-size: 13px;
-  color: #94a3b8;
+  color: #64748b;
   line-height: 1.6;
   margin-bottom: 16px;
 }
@@ -55,15 +57,15 @@
 .gas-tab-tabla th {
   text-align: left;
   padding: 8px 10px;
-  background: #0f172a;
-  color: #94a3b8;
+  background: #f8fafc;
+  color: #64748b;
   font-weight: 600;
 }
 
 .gas-tab-tabla td {
   padding: 8px 10px;
-  border-top: 1px solid #334155;
-  color: #e2e8f0;
+  border-top: 1px solid #e2e8f0;
+  color: #334155;
 }
 
 .gas-tab-badge {

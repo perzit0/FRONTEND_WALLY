@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "../styles/PerfilPage.css";
 import GraficoRobot from "../components/GraficoRobot";
+import PanelMonitoreoZonal from "../components/PanelMonitoreoZonal";
 
 const COLORES = ["#38bdf8", "#22c55e", "#f59e0b", "#ef4444", "#a855f7", "#ec4899"];
 
@@ -54,6 +55,7 @@ function PerfilPage() {
 
   // Graficos
   const [graficoAbierto, setGraficoAbierto] = useState(null);
+  const [monitoreoAbierto, setMonitoreoAbierto] = useState(null);
   const [datosGrafico, setDatosGrafico] = useState([]);
   const [cargandoGrafico, setCargandoGrafico] = useState(false);
 
@@ -307,6 +309,13 @@ function PerfilPage() {
                             <button onClick={() => toggleGrafico(r.device_id)}>
                               {graficoAbierto === r.device_id ? "Ocultar gráfico" : "Ver gráfico"}
                             </button>
+                            <button
+                              onClick={() =>
+                                setMonitoreoAbierto(monitoreoAbierto === r.device_id ? null : r.device_id)
+                              }
+                            >
+                              {monitoreoAbierto === r.device_id ? "Ocultar monitoreo zonal" : "Monitoreo zonal"}
+                            </button>
                             <button onClick={() => manejarDescargar(r.device_id)}>
                               Descargar datos
                             </button>
@@ -318,6 +327,10 @@ function PerfilPage() {
                             </button>
                           </div>
                         </div>
+
+                        {monitoreoAbierto === r.device_id && (
+                          <PanelMonitoreoZonal deviceId={r.device_id} />
+                        )}
 
                         {graficoAbierto === r.device_id && (
                           <div style={{ marginTop: 16, background: "#0f172a", padding: 16, borderRadius: 8 }}>

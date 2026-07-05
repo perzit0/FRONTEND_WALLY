@@ -1,0 +1,47 @@
+.grid-graficos {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.tarjeta-grafico {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 14px 16px 10px 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.tarjeta-grafico-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.tarjeta-grafico-titulo {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.tarjeta-grafico-subtitulo {
+  margin: 2px 0 0 0;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.tarjeta-grafico-valor-actual {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  text-align: right;
+}
+
+.tarjeta-grafico-unidad {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 2px;
+}

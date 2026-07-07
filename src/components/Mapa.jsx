@@ -19,9 +19,15 @@ function crearIconoRobot(color, enAlerta) {
     </svg>
   `;
 
+  // IMPORTANTE: el className del DivIcon se aplica al MISMO elemento que Leaflet
+  // usa para posicionar el marcador (transform: translate3d(...)). Si la animación
+  // de alerta pone su propio "transform: scale(...)" sobre ese elemento, pisa el
+  // transform de posición de Leaflet y el ícono se desalinea/parece moverse al
+  // hacer zoom o pan. Por eso la animación va en un <div> interno, no en el
+  // elemento raíz del ícono.
   return new L.DivIcon({
-    html: svg,
-    className: enAlerta ? "icono-robot marcador-alerta" : "icono-robot",
+    html: `<div class="${enAlerta ? "icono-robot-inner marcador-alerta" : "icono-robot-inner"}">${svg}</div>`,
+    className: "icono-robot",
     iconSize: [36, 36],
     iconAnchor: [18, 18],
     popupAnchor: [0, -18],

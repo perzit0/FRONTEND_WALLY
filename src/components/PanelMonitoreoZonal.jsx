@@ -35,8 +35,33 @@ function PanelMonitoreoZonal({ deviceId }) {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
 
+  const [vista, setVista] = useState("inicio"); // inicio | historial
+  const [historial, setHistorial] = useState([]);
+  const [cargandoHistorial, setCargandoHistorial] = useState(false);
+  const [vinoDeHistorial, setVinoDeHistorial] = useState(false);
+
   const intervaloRef = useRef(null);
   const resultadoRef = useRef(null);
+
+  const cargarHistorial = useCallback(async () => {
+    setCargandoHistorial(true);
+    setError("");
+    try {
+      const res = await client.get(`/monitoreo/dispositivo/${deviceId}`);
+      const finalizados = (res.data || [])
+        .filter((m) => m.estado === "finalizado")
+        .sort((a, b) => new Date(b.hora_fin) - new Date(a.hora_fin));
+      setHistorial(finalizados);
+    } catch (err) {
+      setError("No se pudo cargar el historial de monitoreos.");
+    } finally {
+      setCargandoHistorial(false);
+    }
+  }, [deviceId]);
+
+  useEffect(() => {
+    if (vista === "historial") cargarHistorial();
+  }, [vista, cargarHistorial]);
 
   const detenerPolling = useCallback(() => {
     if (intervaloRef.current) {
@@ -93,6 +118,7 @@ function PanelMonitoreoZonal({ deviceId }) {
       setMonitoreo(res.data.monitoreo);
       setTrazo([]);
       setResultadoFinal(null);
+      setVinoDeHistorial(false);
       intervaloRef.current = setInterval(consultarActivo, 3000);
     } catch (err) {
       setError(err.response?.data?.error || "No se pudo iniciar el monitoreo.");
@@ -167,35 +193,89 @@ function PanelMonitoreoZonal({ deviceId }) {
       {error && <p className="panel-monitoreo-error">{error}</p>}
 
       {!monitoreo && !resultadoFinal && (
-        <div className="panel-monitoreo-inicio">
-          <input
-            type="text"
-            placeholder="Nombre del monitoreo (ej: Miraflores - Av. Larco)"
-            value={nombreMonitoreo}
-            onChange={(e) => setNombreMonitoreo(e.target.value)}
-            className="input-nombre-monitoreo"
-          />
+        <>
+          <div className="panel-monitoreo-tabs">
+            <button
+              className={vista === "inicio" ? "tab-monitoreo tab-activo" : "tab-monitoreo"}
+              onClick={() => setVista("inicio")}
+            >
+              Nuevo monitoreo
+            </button>
+            <button
+              className={vista === "historial" ? "tab-monitoreo tab-activo" : "tab-monitoreo"}
+              onClick={() => setVista("historial")}
+            >
+              Historial
+            </button>
+          </div>
 
-          <button className="btn-verificar-gps" onClick={verificarGps} disabled={verificando}>
-            {verificando ? "Verificando..." : "Verificar señal GPS"}
-          </button>
+          {vista === "inicio" && (
+            <div className="panel-monitoreo-inicio">
+              <input
+                type="text"
+                placeholder="Nombre del monitoreo (ej: Miraflores - Av. Larco)"
+                value={nombreMonitoreo}
+                onChange={(e) => setNombreMonitoreo(e.target.value)}
+                className="input-nombre-monitoreo"
+              />
 
-          {estadoGps && (
-            <div className={`estado-gps ${estadoGps.listo ? "gps-ok" : "gps-mal"}`}>
-              {estadoGps.listo
-                ? "✓ GPS con señal fresca. Listo para iniciar."
-                : `✗ ${estadoGps.razon}`}
+              <button className="btn-verificar-gps" onClick={verificarGps} disabled={verificando}>
+                {verificando ? "Verificando..." : "Verificar señal GPS"}
+              </button>
+
+              {estadoGps && (
+                <div className={`estado-gps ${estadoGps.listo ? "gps-ok" : "gps-mal"}`}>
+                  {estadoGps.listo
+                    ? "✓ GPS con señal fresca. Listo para iniciar."
+                    : `✗ ${estadoGps.razon}`}
+                </div>
+              )}
+
+              <button
+                className="btn-iniciar-monitoreo"
+                onClick={iniciarMonitoreo}
+                disabled={!estadoGps?.listo || cargando}
+              >
+                {cargando ? "Iniciando..." : "Iniciar monitoreo zonal"}
+              </button>
             </div>
           )}
 
-          <button
-            className="btn-iniciar-monitoreo"
-            onClick={iniciarMonitoreo}
-            disabled={!estadoGps?.listo || cargando}
-          >
-            {cargando ? "Iniciando..." : "Iniciar monitoreo zonal"}
-          </button>
-        </div>
+          {vista === "historial" && (
+            <div className="panel-monitoreo-historial">
+              {cargandoHistorial && <p className="historial-mensaje">Cargando historial...</p>}
+
+              {!cargandoHistorial && historial.length === 0 && (
+                <p className="historial-mensaje">Este robot todavía no tiene monitoreos finalizados.</p>
+              )}
+
+              {!cargandoHistorial &&
+                historial.map((m) => (
+                  <button
+                    key={m.id}
+                    className="item-historial"
+                    style={{ borderLeftColor: m.color_hex || "#9ca3af" }}
+                    onClick={() => {
+                      setResultadoFinal(m);
+                      setVinoDeHistorial(true);
+                    }}
+                  >
+                    <div className="item-historial-info">
+                      <strong>{m.nombre || `Monitoreo #${m.id}`}</strong>
+                      <span className="item-historial-fecha">
+                        {m.hora_fin
+                          ? new Date(m.hora_fin).toLocaleString("es-PE", { timeZone: "America/Lima" })
+                          : "Sin fecha"}
+                      </span>
+                    </div>
+                    <span className="item-historial-nivel" style={{ color: m.color_hex || "#9ca3af" }}>
+                      {m.nivel_color ? m.nivel_color.toUpperCase() : "S/D"}
+                    </span>
+                  </button>
+                ))}
+            </div>
+          )}
+        </>
       )}
 
       {monitoreo && (
@@ -293,12 +373,26 @@ function PanelMonitoreoZonal({ deviceId }) {
             <button className="btn-descargar-pdf" onClick={descargarPdf}>
               Descargar PDF
             </button>
+            {vinoDeHistorial && (
+              <button
+                className="btn-volver-historial"
+                onClick={() => {
+                  setResultadoFinal(null);
+                  setVinoDeHistorial(false);
+                  setVista("historial");
+                }}
+              >
+                Volver al historial
+              </button>
+            )}
             <button
               className="btn-nuevo-monitoreo"
               onClick={() => {
                 setResultadoFinal(null);
                 setEstadoGps(null);
                 setNombreMonitoreo("");
+                setVinoDeHistorial(false);
+                setVista("inicio");
               }}
             >
               Nuevo monitoreo

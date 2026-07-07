@@ -82,9 +82,25 @@
   display: inline-block;
 }
 
-.icono-robot.marcador-alerta {
+/* El contenedor raíz del ícono (.icono-robot) es el mismo elemento que Leaflet
+   posiciona con transform: translate3d(...). No le pongas transform/animation
+   a esa clase o el marcador se desalinea al hacer zoom/pan. La animación va
+   en el div interno .icono-robot-inner, que Leaflet no toca. */
+.icono-robot {
+  background: transparent;
+  border: none;
+}
+
+.icono-robot-inner {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.icono-robot-inner.marcador-alerta {
   filter: drop-shadow(0 0 6px #ef4444);
   animation: pulso-alerta 1.2s infinite;
+  transform-origin: center center;
 }
 
 @keyframes pulso-alerta {

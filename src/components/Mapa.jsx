@@ -95,11 +95,12 @@ function Mapa() {
   useEffect(() => {
     cargarDispositivos();
     cargarZonas();
-    const intervalo = setInterval(() => {
-      cargarDispositivos();
-      cargarZonas();
-    }, 20000);
-    return () => clearInterval(intervalo);
+    const intervaloDispositivos = setInterval(cargarDispositivos, 1000);
+    const intervaloZonas = setInterval(cargarZonas, 20000);
+    return () => {
+      clearInterval(intervaloDispositivos);
+      clearInterval(intervaloZonas);
+    };
   }, []);
 
   return (

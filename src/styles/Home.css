@@ -8,6 +8,11 @@
   overflow: hidden;
 }
 
+.home-container > *:not(.sensor-strips-overlay) {
+  position: relative;
+  z-index: 1;
+}
+
 .home-header {
   padding: 28px 20px 18px 20px;
   text-align: center;

@@ -16,11 +16,11 @@ const GASES = {
     ],
   },
   mq135: {
-    nombre: "NH3 / COV",
-    nombreCompleto: "Amoníaco y Compuestos Orgánicos Volátiles",
+    nombre: "MQ-135",
+    nombreCompleto: "Sensor de Calidad del Aire",
     descripcion:
-      "Índice general de calidad del aire. Detecta una mezcla de gases: amoníaco, dióxido de nitrógeno, alcohol, benceno y humo. No identifica un gas específico, funciona como alarma general de contaminación.",
-    unidad: "ppm",
+      "Detecta múltiples contaminantes: amoníaco, óxidos de nitrógeno, alcohol, benceno, humo. Los valores son lecturas ADC del sensor (0-4095). Funciona como índice general de contaminación.",
+    unidad: "ADC",
     niveles: [
       { rango: "0 - 800", nivel: "Bueno", color: "#22c55e", detalle: "Aire bien ventilado, típico de exteriores" },
       { rango: "800 - 1200", nivel: "Moderado", color: "#f59e0b", detalle: "Ventilación reducida, aire cargado" },

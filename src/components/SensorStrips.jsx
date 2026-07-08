@@ -39,8 +39,8 @@ const sensores = [
     key: "mq135",
     nombre: "MQ-135",
     campo: "mq135",
-    unidad: "ppm",
-    descripcion: "Calidad del aire / COV",
+    unidad: "ADC",
+    descripcion: "Calidad del aire",
     nivelFn: nivelMQ135,
   },
   {

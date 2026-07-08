@@ -1,5 +1,6 @@
 import Mapa from "../components/Mapa";
 import IconoPersona from "../components/IconoPersona";
+import SensorStrips from "../components/SensorStrips";
 import GasInfoTabs from "../components/GasInfoTabs";
 import RankingZonas from "../components/RankingZonas";
 import "../styles/Home.css";
@@ -7,6 +8,7 @@ import "../styles/Home.css";
 function Home() {
   return (
     <div className="home-container">
+      <SensorStrips />
       <IconoPersona />
 
       <header className="home-header">

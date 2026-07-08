@@ -1,9 +1,11 @@
 .home-container {
+  position: relative;
   min-height: 100vh;
   background-color: #f8fafc;
   background-image: radial-gradient(circle at 20% 0%, #e0f2fe 0%, transparent 45%),
     radial-gradient(circle at 100% 20%, #ecfeff 0%, transparent 40%);
   color: #1e293b;
+  overflow: hidden;
 }
 
 .home-header {

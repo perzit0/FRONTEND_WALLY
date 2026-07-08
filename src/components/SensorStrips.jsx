@@ -122,19 +122,25 @@ function SensorStrips() {
       {sensores.map((sensor) => {
         const estado = niveles[sensor.key];
         const color = colorPorNivel(estado.nivel);
+        const textoValor = estado.valor !== null && estado.valor !== undefined
+          ? `${estado.valor.toFixed(1)} ${sensor.unidad}`
+          : "S/D";
+
         return (
           <div
             key={sensor.key}
             className={`sensor-strip sensor-strip--${estado.nivel.replace(/\s+/g, "-")}`}
             style={{ "--stripe-color": color }}
           >
-            <div className="sensor-strip-badge">{sensor.nombre}</div>
-            <div className="sensor-strip-name">{sensor.descripcion}</div>
-            <div className="sensor-strip-value">
-              {estado.valor !== null && estado.valor !== undefined ? `${estado.valor.toFixed(1)} ${sensor.unidad}` : "S/D"}
+            <div className="sensor-strip-head">
+              <span className="sensor-strip-badge">{sensor.nombre}</span>
+              <span className="sensor-strip-status">{estado.nivel.toUpperCase()}</span>
             </div>
-            <div className="sensor-strip-status">{estado.nivel.toUpperCase()}</div>
-            <div className="sensor-strip-hint">Actualización en tiempo real</div>
+            <div className="sensor-strip-content">
+              <span className="sensor-strip-name">{sensor.descripcion}</span>
+              <span className="sensor-strip-value">{textoValor}</span>
+            </div>
+            <span className="sensor-strip-hint">Actualización en tiempo real</span>
           </div>
         );
       })}

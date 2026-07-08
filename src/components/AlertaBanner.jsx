@@ -1,23 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import client from "../api/client";
 import "../styles/AlertaBanner.css";
 
 const NOMBRES = { co: "CO", mq135: "MQ135", pm: "Partículas (PM)" };
+const TIMEOUT_ALERTA = 10000; // 10 segundos sin datos = ocultar
 
 function AlertaBanner() {
   const [alertas, setAlertas] = useState([]);
   const [visible, setVisible] = useState(true);
-  const [tiempoSinActividad, setTiempoSinActividad] = useState(0);
+  const tiempoUltimaActividadRef = useRef(Date.now());
 
   const cargarAlertas = async () => {
     try {
       const res = await client.get("/alertas/activas");
-      if (res.data.length > 0) {
+      if (res.data && res.data.length > 0) {
+        tiempoUltimaActividadRef.current = Date.now();
         setAlertas(res.data);
-        setTiempoSinActividad(0);
       } else {
-        setTiempoSinActividad((t) => t + 1);
-        if (tiempoSinActividad > 5) setAlertas([]);
+        const tiempoSinActividad = Date.now() - tiempoUltimaActividadRef.current;
+        if (tiempoSinActividad > TIMEOUT_ALERTA) {
+          setAlertas([]);
+        }
       }
     } catch (err) {
       console.error("Error al cargar alertas:", err);

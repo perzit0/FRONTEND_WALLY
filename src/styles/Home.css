@@ -158,6 +158,9 @@
 
 .home-mapa-wrapper {
   min-height: 520px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .home-mapa-marco {
@@ -168,19 +171,28 @@
   overflow: hidden;
   border: 1px solid rgba(125, 211, 252, 0.28);
   box-shadow: 0 0 40px rgba(14, 165, 233, 0.18), inset 0 0 0 1px rgba(125, 211, 252, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
-.home-mapa-marco .leaflet-container {
-  height: 100% !important;
-  border-radius: 0 !important;
+.home-dashboard.con-graficos .home-mapa-marco {
+  height: 380px;
+  min-height: 320px;
 }
 
-.home-mapa-chip {
+.home-mapa-header {
   position: absolute;
   top: 12px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+.home-mapa-chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -195,6 +207,40 @@
   pointer-events: none;
   white-space: nowrap;
 }
+
+.home-btn-graficos {
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgba(14, 165, 233, 0.9);
+  color: #ffffff;
+  border: 1px solid rgba(14, 165, 233, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.home-btn-graficos:hover {
+  background: rgba(14, 165, 233, 1);
+  box-shadow: 0 0 16px rgba(14, 165, 233, 0.4);
+  transform: scale(1.05);
+}
+
+.home-graficos-vivo {
+  min-height: 280px;
+  border-radius: 20px;
+  padding: 16px;
+  background: rgba(8, 18, 38, 0.7);
+  border: 1px solid rgba(125, 211, 252, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.home-mapa-marco .leaflet-container {
+  height: 100% !important;
+  border-radius: 0 !important;
+}
+
 
 /* ===== Sección inferior: ranking + info de gases ===== */
 .home-info {

@@ -5,6 +5,7 @@ import SensorStrips from "../components/SensorStrips";
 import GasInfoTabs from "../components/GasInfoTabs";
 import RankingZonas from "../components/RankingZonas";
 import AlertaBanner from "../components/AlertaBanner";
+import GraficosEnVivo from "../components/GraficosEnVivo";
 import "../styles/Home.css";
 
 function RelojEnVivo() {
@@ -32,6 +33,8 @@ function RelojEnVivo() {
 }
 
 function Home() {
+  const [mostrarGraficos, setMostrarGraficos] = useState(false);
+
   return (
     <div className="home-container">
       <AlertaBanner />
@@ -67,19 +70,34 @@ function Home() {
         </div>
       </header>
 
-      <main className="home-dashboard">
+      <main className={`home-dashboard ${mostrarGraficos ? "con-graficos" : ""}`}>
         <aside className="home-sensores">
           <SensorStrips />
         </aside>
 
         <section className="home-mapa-wrapper">
           <div className="home-mapa-marco">
-            <div className="home-mapa-chip">
-              <span className="punto-vivo" aria-hidden="true"></span>
-              Rastreo en tiempo real · lecturas cada segundo
+            <div className="home-mapa-header">
+              <div className="home-mapa-chip">
+                <span className="punto-vivo" aria-hidden="true"></span>
+                Rastreo en tiempo real · lecturas cada segundo
+              </div>
+              <button
+                className="home-btn-graficos"
+                onClick={() => setMostrarGraficos(!mostrarGraficos)}
+                title={mostrarGraficos ? "Ocultar gráficos" : "Ver gráficos en tiempo real"}
+              >
+                {mostrarGraficos ? "📊 Ocultar gráficos" : "📈 Ver gráficos"}
+              </button>
             </div>
             <Mapa />
           </div>
+
+          {mostrarGraficos && (
+            <div className="home-graficos-vivo">
+              <GraficosEnVivo />
+            </div>
+          )}
         </section>
       </main>
 

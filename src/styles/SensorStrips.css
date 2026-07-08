@@ -1,52 +1,42 @@
 .sensor-strips-overlay {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding: 0 24px;
-  gap: 16px;
   pointer-events: none;
   z-index: 0;
 }
 
 .sensor-strip {
-  width: 7%;
-  min-width: 80px;
-  max-width: 100px;
-  height: 60%;
-  border-radius: 24px;
+  position: absolute;
+  width: 80px;
+  min-height: 140px;
+  border-radius: 28px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 14px 12px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 11px;
   box-sizing: border-box;
   color: #ffffff;
-  position: relative;
   overflow: hidden;
-  background: rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.06);
+  background: rgba(15, 23, 42, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 0 24px rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(8px);
 }
 
 .sensor-strip::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.14), transparent 60%);
-  opacity: 0.75;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.16), transparent 55%);
+  opacity: 0.7;
   pointer-events: none;
 }
 
 .sensor-strip * {
   position: relative;
   z-index: 1;
-}
-
-.sensor-strip-head {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
 
 .sensor-strip-badge {
@@ -57,17 +47,10 @@
   color: rgba(255, 255, 255, 0.92);
 }
 
-.sensor-strip-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.88);
-}
-
 .sensor-strip-value {
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
-  margin-top: 8px;
-  line-height: 1.1;
+  letter-spacing: 0.02em;
 }
 
 .sensor-strip-status {
@@ -78,57 +61,70 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
-.sensor-strip-hint {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.68);
+.pos-left-top {
+  left: 10px;
+  top: 120px;
 }
 
-.sensor-strip {
-  transition: box-shadow 0.35s ease, background 0.35s ease;
+.pos-left-bottom {
+  left: 10px;
+  bottom: 120px;
 }
 
-.sensor-strip:hover {
-  transform: none;
+.pos-right {
+  right: 10px;
+  top: 120px;
 }
 
 .sensor-strip--bueno {
-  background: linear-gradient(180deg, rgba(34, 197, 94, 0.22), rgba(15, 23, 42, 0.08));
+  background: linear-gradient(180deg, rgba(34, 197, 94, 0.22), rgba(15, 23, 42, 0.12));
 }
 
 .sensor-strip--moderado {
-  background: linear-gradient(180deg, rgba(245, 158, 11, 0.22), rgba(15, 23, 42, 0.08));
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.22), rgba(15, 23, 42, 0.12));
 }
 
 .sensor-strip--malo {
-  background: linear-gradient(180deg, rgba(239, 68, 68, 0.22), rgba(15, 23, 42, 0.08));
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.22), rgba(15, 23, 42, 0.12));
 }
 
 .sensor-strip--critico {
-  background: linear-gradient(180deg, rgba(153, 27, 27, 0.22), rgba(15, 23, 42, 0.1));
+  background: linear-gradient(180deg, rgba(153, 27, 27, 0.22), rgba(15, 23, 42, 0.12));
 }
 
 .sensor-strip--sin-datos {
-  background: linear-gradient(180deg, rgba(148, 163, 184, 0.18), rgba(15, 23, 42, 0.08));
+  background: linear-gradient(180deg, rgba(148, 163, 184, 0.18), rgba(15, 23, 42, 0.12));
 }
 
 @media (max-width: 1100px) {
-  .sensor-strips-overlay {
-    padding: 0 12px;
+  .pos-left-top,
+  .pos-left-bottom,
+  .pos-right {
+    left: 8px;
+    right: auto;
+  }
+
+  .pos-right {
+    right: 8px;
   }
 }
 
 @media (max-width: 860px) {
-  .sensor-strips-overlay {
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 14px;
-    padding: 16px;
+  .sensor-strip {
+    position: relative;
+    width: 100%;
+    min-height: auto;
+    max-width: none;
+    margin: 0 auto;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
   }
 
-  .sensor-strip {
-    width: 100%;
-    max-width: none;
-    min-width: auto;
-    height: auto;
+  .pos-left-top,
+  .pos-left-bottom,
+  .pos-right {
+    position: relative;
   }
 }

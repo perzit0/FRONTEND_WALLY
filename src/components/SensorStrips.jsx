@@ -126,21 +126,21 @@ function SensorStrips() {
           ? `${estado.valor.toFixed(1)} ${sensor.unidad}`
           : "S/D";
 
+        const positionClass = sensor.key === "mq135"
+          ? "pos-right"
+          : sensor.key === "mq7"
+          ? "pos-left-top"
+          : "pos-left-bottom";
+
         return (
           <div
             key={sensor.key}
-            className={`sensor-strip sensor-strip--${estado.nivel.replace(/\s+/g, "-")}`}
+            className={`sensor-strip ${positionClass} sensor-strip--${estado.nivel.replace(/\s+/g, "-")}`}
             style={{ "--stripe-color": color }}
           >
-            <div className="sensor-strip-head">
-              <span className="sensor-strip-badge">{sensor.nombre}</span>
-              <span className="sensor-strip-status">{estado.nivel.toUpperCase()}</span>
-            </div>
-            <div className="sensor-strip-content">
-              <span className="sensor-strip-name">{sensor.descripcion}</span>
-              <span className="sensor-strip-value">{textoValor}</span>
-            </div>
-            <span className="sensor-strip-hint">Actualización en tiempo real</span>
+            <span className="sensor-strip-badge">{sensor.nombre}</span>
+            <span className="sensor-strip-value">{textoValor}</span>
+            <span className="sensor-strip-status">{estado.nivel.toUpperCase()}</span>
           </div>
         );
       })}

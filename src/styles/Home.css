@@ -79,10 +79,10 @@
   margin: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 34px;
+  gap: 14px;
+  font-size: 52px;
   font-weight: 900;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
   background: linear-gradient(90deg, #7dd3fc, #4ade80);
   -webkit-background-clip: text;
   background-clip: text;
@@ -92,10 +92,10 @@
 .home-badge-vivo {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 4px 12px;
+  gap: 8px;
+  padding: 6px 16px;
   border-radius: 999px;
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.14em;
   color: #86efac;
@@ -104,9 +104,10 @@
 }
 
 .home-title p {
-  margin: 4px 0 0;
-  font-size: 14px;
+  margin: 8px 0 0;
+  font-size: 18px;
   color: #94a3b8;
+  font-weight: 500;
 }
 
 .home-topbar-derecha {
@@ -122,17 +123,19 @@
 }
 
 .home-reloj-hora {
-  font-size: 24px;
-  font-weight: 800;
+  font-size: 32px;
+  font-weight: 900;
   color: #f8fafc;
   font-variant-numeric: tabular-nums;
   line-height: 1.1;
+  letter-spacing: 0.5px;
 }
 
 .home-reloj-fecha {
-  font-size: 12px;
+  font-size: 14px;
   color: #94a3b8;
   text-transform: capitalize;
+  font-weight: 600;
 }
 
 /* ===== Dashboard: sensores + mapa ===== */
@@ -195,10 +198,10 @@
 .home-mapa-chip {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 7px 16px;
+  gap: 10px;
+  padding: 10px 20px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #e2e8f0;
   background: rgba(6, 13, 28, 0.85);
@@ -209,9 +212,9 @@
 }
 
 .home-btn-graficos {
-  padding: 7px 14px;
+  padding: 10px 18px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   background: rgba(14, 165, 233, 0.9);
   color: #ffffff;

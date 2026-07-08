@@ -14,7 +14,7 @@
 
 .sensor-panel-header h2 {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -67,21 +67,21 @@
 }
 
 .sensor-card-nombre {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.12em;
   color: #e2e8f0;
 }
 
 .sensor-card-desc {
-  font-size: 11px;
+  font-size: 13px;
   color: #94a3b8;
   text-align: right;
 }
 
 .sensor-card-valor {
-  margin: 10px 0 8px;
-  font-size: 32px;
+  margin: 12px 0 10px;
+  font-size: 40px;
   font-weight: 800;
   line-height: 1;
   color: #f8fafc;
@@ -89,9 +89,9 @@
 }
 
 .sensor-card-unidad {
-  margin-left: 6px;
-  font-size: 13px;
-  font-weight: 600;
+  margin-left: 8px;
+  font-size: 15px;
+  font-weight: 700;
   color: #94a3b8;
 }
 
@@ -127,15 +127,15 @@
 }
 
 .sensor-card-estado-punto {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--nivel-color);
 }
 
 .sensor-panel-nota {
   margin: 0;
-  font-size: 11px;
+  font-size: 13px;
   color: #64748b;
   text-align: left;
 }

@@ -7,11 +7,18 @@ const NOMBRES = { co: "CO", mq135: "MQ135", pm: "Partículas (PM)" };
 function AlertaBanner() {
   const [alertas, setAlertas] = useState([]);
   const [visible, setVisible] = useState(true);
+  const [tiempoSinActividad, setTiempoSinActividad] = useState(0);
 
   const cargarAlertas = async () => {
     try {
       const res = await client.get("/alertas/activas");
-      setAlertas(res.data);
+      if (res.data.length > 0) {
+        setAlertas(res.data);
+        setTiempoSinActividad(0);
+      } else {
+        setTiempoSinActividad((t) => t + 1);
+        if (tiempoSinActividad > 5) setAlertas([]);
+      }
     } catch (err) {
       console.error("Error al cargar alertas:", err);
     }
@@ -19,7 +26,7 @@ function AlertaBanner() {
 
   useEffect(() => {
     cargarAlertas();
-    const intervalo = setInterval(cargarAlertas, 30000);
+    const intervalo = setInterval(cargarAlertas, 1000);
     return () => clearInterval(intervalo);
   }, []);
 

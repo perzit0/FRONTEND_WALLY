@@ -1,25 +1,25 @@
 .icono-persona-wrapper {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 1000;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .icono-persona-btn {
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   border: none;
-  background-color: #1f4e78;
+  background: linear-gradient(135deg, #0284c7, #22c55e);
   color: #fff;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   overflow: hidden;
   padding: 0;
 }
@@ -32,7 +32,8 @@
 }
 
 .icono-persona-btn:hover {
-  transform: scale(1.05);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.22);
 }
 
 .menu-usuario {

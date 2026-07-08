@@ -56,19 +56,23 @@ const sensores = [
 function colorPorNivel(nivel) {
   switch (nivel) {
     case "bueno":
-      return "#22c55e";
+      return "#4ade80";
     case "moderado":
-      return "#f59e0b";
+      return "#fbbf24";
     case "malo":
-      return "#ef4444";
+      return "#fb7185";
     case "critico":
-      return "#991b1b";
+      return "#ef4444";
     default:
-      return "#64748b";
+      return "#94a3b8";
   }
 }
 
+const ESCALAS = { mq7: 60, mq135: 1500, sharp: 55 };
+const ETIQUETAS = { bueno: "Bueno", moderado: "Moderado", malo: "Malo", critico: "Crítico", "sin datos": "Sin datos" };
+
 function SensorStrips() {
+  const [robotsActivos, setRobotsActivos] = useState(0);
   const [niveles, setNiveles] = useState({
     mq7: { valor: null, nivel: "sin datos" },
     mq135: { valor: null, nivel: "sin datos" },
@@ -106,6 +110,7 @@ function SensorStrips() {
     try {
       const res = await client.get("/dispositivos");
       setNiveles(calcularNiveles(res.data));
+      setRobotsActivos(res.data.filter((d) => d.ultima_lectura).length);
     } catch (err) {
       console.error("Error cargando datos de sensores para franjas:", err);
     }
@@ -118,32 +123,47 @@ function SensorStrips() {
   }, []);
 
   return (
-    <div className="sensor-strips-overlay" aria-hidden="true">
+    <div className="sensor-panel">
+      <div className="sensor-panel-header">
+        <h2>Sensores en vivo</h2>
+        <span className="sensor-panel-vivo">
+          <span className="punto-vivo" aria-hidden="true"></span>
+          {robotsActivos > 0 ? `${robotsActivos} robot${robotsActivos === 1 ? "" : "s"} activo${robotsActivos === 1 ? "" : "s"}` : "Buscando robots…"}
+        </span>
+      </div>
+
       {sensores.map((sensor) => {
         const estado = niveles[sensor.key];
         const color = colorPorNivel(estado.nivel);
-        const textoValor = estado.valor !== null && estado.valor !== undefined
-          ? `${estado.valor.toFixed(1)} ${sensor.unidad}`
-          : "S/D";
-
-        const positionClass = sensor.key === "mq135"
-          ? "pos-right"
-          : sensor.key === "mq7"
-          ? "pos-left-top"
-          : "pos-left-bottom";
+        const tieneValor = estado.valor !== null && estado.valor !== undefined;
+        const porcentaje = tieneValor ? Math.min((estado.valor / ESCALAS[sensor.key]) * 100, 100) : 0;
 
         return (
-          <div
+          <article
             key={sensor.key}
-            className={`sensor-strip ${positionClass} sensor-strip--${estado.nivel.replace(/\s+/g, "-")}`}
-            style={{ "--stripe-color": color }}
+            className={`sensor-card sensor-card--${estado.nivel.replace(/\s+/g, "-")}`}
+            style={{ "--nivel-color": color }}
           >
-            <span className="sensor-strip-badge">{sensor.nombre}</span>
-            <span className="sensor-strip-value">{textoValor}</span>
-            <span className="sensor-strip-status">{estado.nivel.toUpperCase()}</span>
-          </div>
+            <header className="sensor-card-header">
+              <span className="sensor-card-nombre">{sensor.nombre}</span>
+              <span className="sensor-card-desc">{sensor.descripcion}</span>
+            </header>
+            <div className="sensor-card-valor">
+              {tieneValor ? estado.valor.toFixed(1) : "—"}
+              <span className="sensor-card-unidad">{sensor.unidad}</span>
+            </div>
+            <div className="sensor-card-barra">
+              <span style={{ width: `${porcentaje}%` }}></span>
+            </div>
+            <span className="sensor-card-estado">
+              <span className="sensor-card-estado-punto" aria-hidden="true"></span>
+              {ETIQUETAS[estado.nivel]}
+            </span>
+          </article>
         );
       })}
+
+      <p className="sensor-panel-nota">Se muestra el valor más alto reportado por los robots activos.</p>
     </div>
   );
 }

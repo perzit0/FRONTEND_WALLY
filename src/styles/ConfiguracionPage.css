@@ -23,15 +23,17 @@
 
 .config-page-header h1 {
   margin: 0;
-  font-size: 26px;
+  font-size: 28px;
   color: #7dd3fc;
   font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .config-page-header p {
-  margin: 4px 0 0 0;
+  margin: 6px 0 0 0;
   color: #94a3b8;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .config-page-grid {
@@ -43,18 +45,26 @@
 }
 
 .config-card {
-  background: rgba(13, 27, 51, 0.85);
-  border: 1px solid rgba(125, 211, 252, 0.14);
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 0 20px rgba(14, 165, 233, 0.1);
+  background: linear-gradient(135deg, rgba(13, 27, 51, 0.95), rgba(20, 36, 66, 0.85));
+  border: 1px solid rgba(125, 211, 252, 0.18);
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.12);
+  transition: all 0.3s ease;
+}
+
+.config-card:hover {
+  border-color: rgba(125, 211, 252, 0.3);
+  box-shadow: 0 12px 40px rgba(14, 165, 233, 0.18);
+  transform: translateY(-2px);
 }
 
 .config-card h2 {
-  margin: 0 0 14px 0;
-  font-size: 15px;
+  margin: 0 0 18px 0;
+  font-size: 17px;
   color: #7dd3fc;
   font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
 .config-foto-wrapper {
@@ -64,18 +74,20 @@
 }
 
 .config-foto-preview {
-  width: 72px;
-  height: 72px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   overflow: hidden;
-  background: #0ea5e9;
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
   color: white;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+  border: 2px solid rgba(125, 211, 252, 0.3);
 }
 
 .config-foto-preview img {
@@ -119,20 +131,27 @@
 }
 
 .config-btn-primario {
-  background: #0ea5e9;
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 13px;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 12px;
+  transition: all 0.2s ease;
+}
+
+.config-btn-primario:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(14, 165, 233, 0.3);
 }
 
 .config-btn-primario:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .config-btn-secundario {

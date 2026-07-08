@@ -1,11 +1,19 @@
 .home-container {
   position: relative;
   min-height: 100vh;
-  background-color: #f8fafc;
-  background-image: radial-gradient(circle at 20% 0%, #e0f2fe 0%, transparent 45%),
-    radial-gradient(circle at 100% 20%, #ecfeff 0%, transparent 40%);
-  color: #1e293b;
+  background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 20%),
+    radial-gradient(circle at top right, rgba(16, 185, 129, 0.16), transparent 18%),
+    linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+  color: #0f172a;
   overflow: hidden;
+}
+
+.home-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.45), transparent 45%);
+  pointer-events: none;
 }
 
 .home-container > *:not(.sensor-strips-overlay) {

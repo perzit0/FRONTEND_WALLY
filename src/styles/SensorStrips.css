@@ -1,35 +1,35 @@
 .sensor-strips-overlay {
-  position: absolute;
+  position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: 998;
 }
 
 .sensor-strip {
-  position: absolute;
-  width: 80px;
-  min-height: 140px;
-  border-radius: 28px;
+  position: fixed;
+  width: 74px;
+  min-height: 132px;
+  border-radius: 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 8px;
-  padding: 12px 11px;
+  gap: 6px;
+  padding: 12px 10px;
   box-sizing: border-box;
   color: #ffffff;
   overflow: hidden;
-  background: rgba(15, 23, 42, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 0 24px rgba(15, 23, 42, 0.08);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.14);
+  backdrop-filter: blur(18px);
 }
 
 .sensor-strip::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.16), transparent 55%);
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.24), transparent 55%);
   opacity: 0.7;
   pointer-events: none;
 }
@@ -44,11 +44,11 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.96);
 }
 
 .sensor-strip-value {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.02em;
 }
@@ -56,24 +56,24 @@
 .sensor-strip-status {
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .pos-left-top {
-  left: 10px;
-  top: 120px;
+  left: 16px;
+  top: 18vh;
 }
 
 .pos-left-bottom {
-  left: 10px;
-  bottom: 120px;
+  left: 16px;
+  bottom: 18vh;
 }
 
 .pos-right {
-  right: 10px;
-  top: 120px;
+  right: 16px;
+  top: 18vh;
 }
 
 .sensor-strip--bueno {

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
@@ -61,11 +61,37 @@ function colorPorNivel(nivel) {
   }
 }
 
-function Mapa() {
+// Vive DENTRO del <MapContainer> porque useMap() solo funciona ahí.
+// Cuando cambia zonaEnfocada, mueve el mapa hacia esa zona y, apenas
+// termina la animación, abre el popup del círculo correspondiente
+// (buscado por id en circulosRef, que Mapa llena al renderizar cada Circle).
+function CentradorMapa({ zonaEnfocada, circulosRef }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!zonaEnfocada) return;
+    const { id, centro_lat, centro_lng } = zonaEnfocada;
+    if (centro_lat == null || centro_lng == null) return;
+
+    map.flyTo([centro_lat, centro_lng], 16, { duration: 1.1 });
+
+    const timer = setTimeout(() => {
+      const capa = circulosRef.current[id];
+      if (capa) capa.openPopup();
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, [zonaEnfocada, map, circulosRef]);
+
+  return null;
+}
+
+function Mapa({ zonaEnfocada }) {
   const [dispositivos, setDispositivos] = useState([]);
   const [zonas, setZonas] = useState([]);
   const [monitoreoAbierto, setMonitoreoAbierto] = useState(null);
   const { estaAutenticado } = useAuth();
+  const circulosRef = useRef({});
 
   const cargarDispositivos = async () => {
     try {
@@ -108,9 +134,14 @@ function Mapa() {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       />
 
+      <CentradorMapa zonaEnfocada={zonaEnfocada} circulosRef={circulosRef} />
+
       {zonas.map((z) => (
         <Circle
           key={`zona-${z.id}`}
+          ref={(capa) => {
+            if (capa) circulosRef.current[z.id] = capa;
+          }}
           center={[z.centro_lat, z.centro_lng]}
           radius={z.radio_metros || 15}
           pathOptions={{

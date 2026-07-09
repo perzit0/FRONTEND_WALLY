@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Mapa from "../components/Mapa";
 import IconoPersona from "../components/IconoPersona";
 import SensorStrips from "../components/SensorStrips";
@@ -34,6 +34,16 @@ function RelojEnVivo() {
 
 function Home() {
   const [mostrarGraficos, setMostrarGraficos] = useState(false);
+  const [zonaEnfocada, setZonaEnfocada] = useState(null);
+  const mapaWrapperRef = useRef(null);
+
+  // Se pasa como onVerEnMapa al RankingZonas. Agregamos _ts para forzar un
+  // valor "nuevo" cada vez, así si el usuario hace click 2 veces seguidas en
+  // la misma zona el mapa igual vuelve a centrarse y reabre el popup.
+  const handleVerEnMapa = (zona) => {
+    setZonaEnfocada({ ...zona, _ts: Date.now() });
+    mapaWrapperRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <div className="home-container">
@@ -75,7 +85,7 @@ function Home() {
           <SensorStrips />
         </aside>
 
-        <section className="home-mapa-wrapper">
+        <section className="home-mapa-wrapper" ref={mapaWrapperRef}>
           <div className="home-mapa-marco">
             <div className="home-mapa-header">
               <div className="home-mapa-chip">
@@ -90,7 +100,7 @@ function Home() {
                 {mostrarGraficos ? "📊 Ocultar gráficos" : "📈 Ver gráficos"}
               </button>
             </div>
-            <Mapa />
+            <Mapa zonaEnfocada={zonaEnfocada} />
           </div>
 
           {mostrarGraficos && (
@@ -102,7 +112,7 @@ function Home() {
       </main>
 
       <section className="home-info">
-        <RankingZonas />
+        <RankingZonas onVerEnMapa={handleVerEnMapa} />
         <GasInfoTabs />
       </section>
 

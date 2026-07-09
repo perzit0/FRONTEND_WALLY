@@ -103,3 +103,31 @@
   font-weight: 800;
   flex-shrink: 0;
 }
+
+.ranking-zonas-btn-ver {
+  flex-shrink: 0;
+  border: 1px solid #0ea5e9;
+  background: #fff;
+  color: #0284c7;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.ranking-zonas-btn-ver:hover {
+  background: #0ea5e9;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .ranking-zonas-item {
+    flex-wrap: wrap;
+  }
+  .ranking-zonas-btn-ver {
+    margin-left: 24px;
+  }
+}

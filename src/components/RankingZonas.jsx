@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import client from "../api/client";
 import "../styles/RankingZonas.css";
 
-function RankingZonas() {
+function RankingZonas({ onVerEnMapa }) {
   const [datos, setDatos] = useState(null);
   const [vista, setVista] = useState("peores"); // peores | mejores
 
@@ -53,6 +53,15 @@ function RankingZonas() {
             <span className="ranking-zonas-nivel" style={{ color: z.color_hex }}>
               {z.nivel_color?.toUpperCase()}
             </span>
+            {z.centro_lat != null && z.centro_lng != null && (
+              <button
+                type="button"
+                className="ranking-zonas-btn-ver"
+                onClick={() => onVerEnMapa && onVerEnMapa(z)}
+              >
+                Ver en el mapa
+              </button>
+            )}
           </li>
         ))}
       </ol>

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import client from "../api/client";
 import "../styles/AlertaBanner.css";
 
-const NOMBRES = { co: "CO", mq135: "MQ135", pm: "Partículas (PM)" };
+const NOMBRES = { co: "CO", mq135: "MQ135" };
 const TIMEOUT_ALERTA = 10000; // 10 segundos sin datos = ocultar
 
 function AlertaBanner() {

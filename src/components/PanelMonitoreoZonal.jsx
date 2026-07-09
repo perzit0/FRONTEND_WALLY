@@ -353,10 +353,6 @@ function PanelMonitoreoZonal({ deviceId }) {
               <span className="metrica-valor">{resultadoFinal.promedio_mq135 ?? "S/D"}</span>
             </div>
             <div className="metrica-card">
-              <span className="metrica-label">PM promedio</span>
-              <span className="metrica-valor">{resultadoFinal.promedio_pm ?? "S/D"} µg/m³</span>
-            </div>
-            <div className="metrica-card">
               <span className="metrica-label">Distancia recorrida</span>
               <span className="metrica-valor">{resultadoFinal.distancia_total_m ?? "S/D"} m</span>
             </div>

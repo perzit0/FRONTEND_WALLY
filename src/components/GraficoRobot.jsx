@@ -32,15 +32,6 @@ function GraficoRobot({ lecturas }) {
         valores={lecturas.map((l) => l.mq135)}
         valorActual={ultima?.mq135}
       />
-      <TarjetaGrafico
-        titulo="Material particulado"
-        subtitulo="Sensor Sharp PM2.5"
-        color="#f59e0b"
-        unidad="µg/m³"
-        labels={labels}
-        valores={lecturas.map((l) => l.pm)}
-        valorActual={ultima?.pm}
-      />
     </div>
   );
 }

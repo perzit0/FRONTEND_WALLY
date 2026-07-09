@@ -50,13 +50,6 @@ function nivelMQ135(valor) {
   return "critico";
 }
 
-function nivelPM(pm) {
-  if (pm === null || pm === undefined) return "sin datos";
-  if (pm < 12) return "bueno";
-  if (pm < 35.4) return "moderado";
-  if (pm < 55) return "malo";
-  return "critico";
-}
 
 function colorPorNivel(nivel) {
   switch (nivel) {
@@ -137,7 +130,6 @@ function Mapa() {
               </p>
               <p style={{ margin: "2px 0", fontSize: 12 }}>CO: {z.promedio_co ?? "S/D"} ppm</p>
               <p style={{ margin: "2px 0", fontSize: 12 }}>MQ135: {z.promedio_mq135 ?? "S/D"}</p>
-              <p style={{ margin: "2px 0", fontSize: 12 }}>PM: {z.promedio_pm ?? "S/D"} µg/m³</p>
               <p style={{ margin: "6px 0 0 0", fontSize: 11, color: "#9ca3af" }}>
                 {z.hora_fin ? new Date(z.hora_fin).toLocaleString("es-PE", { timeZone: "America/Lima" }) : ""}
               </p>
@@ -151,11 +143,9 @@ function Mapa() {
 
         const nivelCOActual = nivelCO(d.ultima_lectura.co);
         const nivelGases = nivelMQ135(d.ultima_lectura.mq135);
-        const nivelPolvo = nivelPM(d.ultima_lectura.pm);
 
         const enAlerta = ["malo", "critico"].includes(nivelCOActual) ||
-                          ["malo", "critico"].includes(nivelGases) ||
-                          ["malo", "critico"].includes(nivelPolvo);
+                          ["malo", "critico"].includes(nivelGases);
 
         const icono = crearIconoRobot(d.color || "#38bdf8", enAlerta);
 
@@ -180,13 +170,6 @@ function Mapa() {
       <span style={{ fontWeight: 600, color: "#374151" }}>Calidad del aire: </span>
       <span style={{ color: colorPorNivel(nivelGases), fontWeight: 600 }}>
         {nivelGases === "bueno" ? "Buena calidad" : nivelGases === "moderado" ? "Calidad moderada" : nivelGases === "malo" ? "Mala calidad" : nivelGases === "critico" ? "Calidad crítica" : "Sin datos"}
-      </span>
-    </p>
-
-    <p style={{ margin: "2px 0" }}>
-      <span style={{ fontWeight: 600, color: "#374151" }}>PM: </span>
-      <span style={{ color: colorPorNivel(nivelPolvo), fontWeight: 600 }}>
-        {d.ultima_lectura.pm ?? "S/D"} µg/m³ ({nivelPolvo})
       </span>
     </p>
 

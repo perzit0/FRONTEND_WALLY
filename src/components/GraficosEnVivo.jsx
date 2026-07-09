@@ -36,11 +36,11 @@ function GraficosEnVivo() {
         const ultimasLecturas = res.data
           .filter((d) => d.ultima_lectura)
           .flatMap((d) =>
-            [...Array(3)].map((_, i) => ({
+            [...Array(2)].map((_, i) => ({
               ...d.ultima_lectura,
               device_id: d.device_id,
               nombre: d.nombre,
-              tipo: ["co", "mq135", "pm"][i],
+              tipo: ["co", "mq135"][i],
             }))
           );
 
@@ -66,7 +66,6 @@ function GraficosEnVivo() {
     const colores = {
       co: { border: "#fb7185", bg: "rgba(251, 113, 133, 0.1)" },
       mq135: { border: "#fbbf24", bg: "rgba(251, 191, 36, 0.1)" },
-      pm: { border: "#4ade80", bg: "rgba(74, 222, 128, 0.1)" },
     };
 
     const datos = lecturas
@@ -74,14 +73,13 @@ function GraficosEnVivo() {
       .map((l) => {
         if (tipo === "co") return l.co ?? null;
         if (tipo === "mq135") return l.mq135 ?? null;
-        if (tipo === "pm") return l.pm ?? null;
       });
 
     return {
       labels: getMarcasTiempo(),
       datasets: [
         {
-          label: tipo === "co" ? "CO (ppm)" : tipo === "mq135" ? "MQ135 (ADC)" : "PM2.5 (µg/m³)",
+          label: tipo === "co" ? "CO (ppm)" : "MQ135 (ADC)",
           data: datos,
           borderColor: colores[tipo].border,
           backgroundColor: colores[tipo].bg,
@@ -139,9 +137,6 @@ function GraficosEnVivo() {
         </div>
         <div className="grafico-card">
           <Line data={getDatosGrafico("mq135")} options={opcionesGrafico} />
-        </div>
-        <div className="grafico-card">
-          <Line data={getDatosGrafico("pm")} options={opcionesGrafico} />
         </div>
       </div>
     </div>

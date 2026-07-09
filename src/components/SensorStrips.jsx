@@ -18,14 +18,6 @@ function nivelMQ135(valor) {
   return "critico";
 }
 
-function nivelPM(pm) {
-  if (pm === null || pm === undefined) return "sin datos";
-  if (pm < 12) return "bueno";
-  if (pm < 35.4) return "moderado";
-  if (pm < 55) return "malo";
-  return "critico";
-}
-
 const sensores = [
   {
     key: "mq7",
@@ -42,14 +34,6 @@ const sensores = [
     unidad: "ADC",
     descripcion: "Calidad del aire",
     nivelFn: nivelMQ135,
-  },
-  {
-    key: "sharp",
-    nombre: "Sharp",
-    campo: "pm",
-    unidad: "µg/m³",
-    descripcion: "Partículas PM2.5",
-    nivelFn: nivelPM,
   },
 ];
 
@@ -68,7 +52,7 @@ function colorPorNivel(nivel) {
   }
 }
 
-const ESCALAS = { mq7: 60, mq135: 1500, sharp: 55 };
+const ESCALAS = { mq7: 60, mq135: 1500 };
 const ETIQUETAS = { bueno: "Bueno", moderado: "Moderado", malo: "Malo", critico: "Crítico", "sin datos": "Sin datos" };
 
 function SensorStrips() {
@@ -76,7 +60,6 @@ function SensorStrips() {
   const [niveles, setNiveles] = useState({
     mq7: { valor: null, nivel: "sin datos" },
     mq135: { valor: null, nivel: "sin datos" },
-    sharp: { valor: null, nivel: "sin datos" },
   });
 
   const calcularNiveles = (dispositivos) => {
@@ -86,10 +69,6 @@ function SensorStrips() {
     const mq135Valores = dispositivos
       .map((d) => d.ultima_lectura?.mq135)
       .filter((v) => v !== null && v !== undefined);
-    const pmValores = dispositivos
-      .map((d) => d.ultima_lectura?.pm)
-      .filter((v) => v !== null && v !== undefined);
-
     return {
       mq7: {
         valor: coValores.length ? Math.max(...coValores) : null,
@@ -98,10 +77,6 @@ function SensorStrips() {
       mq135: {
         valor: mq135Valores.length ? Math.max(...mq135Valores) : null,
         nivel: nivelMQ135(mq135Valores.length ? Math.max(...mq135Valores) : null),
-      },
-      sharp: {
-        valor: pmValores.length ? Math.max(...pmValores) : null,
-        nivel: nivelPM(pmValores.length ? Math.max(...pmValores) : null),
       },
     };
   };

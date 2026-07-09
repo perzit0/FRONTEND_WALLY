@@ -281,16 +281,6 @@ function AdminDashboard() {
                   valorActual={ultimaLectura?.mq135}
                   alto={200}
                 />
-                <TarjetaGrafico
-                  titulo="Material particulado"
-                  subtitulo="Sensor Sharp PM2.5"
-                  color="#f59e0b"
-                  unidad="µg/m³"
-                  labels={labelsLecturas}
-                  valores={lecturas.map((l) => l.pm)}
-                  valorActual={ultimaLectura?.pm}
-                  alto={200}
-                />
               </div>
             ) : (
               <p className="admin-sin-datos">No hay lecturas para este dispositivo</p>
@@ -320,7 +310,6 @@ function AdminDashboard() {
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <TablaMetricaAdc titulo="MQ-7 (CO)" stats={metricasAdc.mq7} />
                 <TablaMetricaAdc titulo="MQ-135 (Calidad del aire)" stats={metricasAdc.mq135} />
-                <TablaMetricaAdc titulo="Sharp GP2Y1010 (Polvo)" stats={metricasAdc.sharp} />
               </div>
             ) : (
               <p className="admin-sin-datos">Cargando métricas...</p>

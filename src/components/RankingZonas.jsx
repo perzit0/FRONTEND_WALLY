@@ -47,8 +47,7 @@ function RankingZonas() {
             <div className="ranking-zonas-info">
               <p className="ranking-zonas-nombre">{z.nombre}</p>
               <p className="ranking-zonas-detalle">
-                CO {z.promedio_co ?? "S/D"} ppm · MQ135 {z.promedio_mq135 ?? "S/D"} · PM{" "}
-                {z.promedio_pm ?? "S/D"} µg/m³
+                CO {z.promedio_co ?? "S/D"} ppm · MQ135 {z.promedio_mq135 ?? "S/D"}
               </p>
             </div>
             <span className="ranking-zonas-nivel" style={{ color: z.color_hex }}>

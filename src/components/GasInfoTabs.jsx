@@ -27,19 +27,6 @@ const GASES = {
       { rango: "> 1200", nivel: "Malo", color: "#ef4444", detalle: "Mala ventilación, puede causar fatiga" },
     ],
   },
-  pm: {
-    nombre: "PM",
-    nombreCompleto: "Material Particulado (Polvo)",
-    descripcion:
-      "Partículas sólidas en suspensión en el aire: polvo, humo, polen, fibras. Las partículas PM2.5 son las más peligrosas porque son tan pequeñas que llegan hasta los pulmones profundos.",
-    unidad: "µg/m³",
-    niveles: [
-      { rango: "0 - 12", nivel: "Bueno", color: "#22c55e", detalle: "Calidad de aire satisfactoria" },
-      { rango: "12 - 35.4", nivel: "Moderado", color: "#f59e0b", detalle: "Grupos sensibles pueden notar síntomas leves" },
-      { rango: "35.4 - 55", nivel: "Malo", color: "#ef4444", detalle: "No saludable, evitar exposición prolongada" },
-      { rango: "> 55", nivel: "Crítico", color: "#991b1b", detalle: "Toda la población: evitar exposición" },
-    ],
-  },
 };
 
 function GasInfoTabs() {

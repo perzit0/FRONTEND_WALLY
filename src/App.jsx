@@ -5,6 +5,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import PerfilPage from "./pages/PerfilPage";
 import GraficosPage from "./pages/GraficosPage";
 import ConfiguracionPage from "./pages/ConfiguracionPage";
+import AlarmasPush from "./components/AlarmasPush";
 
 function RutaAdmin({ children }) {
   const { estaAutenticado, esAdmin, cargando } = useAuth();
@@ -32,7 +33,9 @@ function RutaPrivada({ children }) {
 
 function App() {
   return (
-    <Routes>
+    <>
+      <AlarmasPush />
+      <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/perfil" element={<PerfilPage />} />
       <Route
@@ -59,7 +62,8 @@ function App() {
           </RutaAdmin>
         }
       />
-    </Routes>
+      </Routes>
+    </>
   );
 }
 

@@ -8,6 +8,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // service worker propio (src/sw.js): cache + manejador de alarmas push
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.js',
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+      },
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'WALLY - Monitoreo de calidad del aire',
@@ -24,12 +32,6 @@ export default defineConfig({
           { src: '/pwa-512.png', sizes: '512x512', type: 'image/png' },
           { src: '/pwa-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
-      },
-      workbox: {
-        // App shell offline; los datos de la API siempre van a la red
-        navigateFallback: '/index.html',
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
       },
     }),
   ],
